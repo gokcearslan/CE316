@@ -25,8 +25,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.example.ce316team5project'
-    mainClass = 'com.example.ce316team5project.HelloApplication'
+    mainModule = 'com.example.ce316project10may'
+    mainClass = 'com.example.ce316project10may.HelloApplication'
 }
 
 javafx {
@@ -38,6 +38,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation 'org.xerial:sqlite-jdbc:3.34.0'
 }
 
 test {
