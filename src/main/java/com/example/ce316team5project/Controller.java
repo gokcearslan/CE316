@@ -705,6 +705,200 @@ public class Controller implements Initializable {
         }
 
     }
+
+    public void goToEditConfig() {
+
+        String url = "jdbc:sqlite:database.db";
+
+        if (configNameTxt.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Input Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter a configuration name to edit.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+
+            Connection connection = DriverManager.getConnection(url);
+            ObservableList<Configuration> data3 = FXCollections.observableArrayList();
+            Statement stmt = connection.createStatement();
+            String sql = "SELECT * FROM configuration";
+            ResultSet rs = stmt.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int numColumns = metaData.getColumnCount();
+
+            ArrayList<String> allColumnNames = new ArrayList<>();
+
+            ObservableList<Configuration> list2 = FXCollections.observableArrayList(new Configuration("", ""));
+
+            editAttributeName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("X"));
+            editAttributeValue.setCellValueFactory(new PropertyValueFactory<Configuration, String>("Y"));
+            editTab2TW.setItems(list2);
+
+
+            List<String> columnValues = new ArrayList<>();
+
+
+            String configName = configNameTxt.getText();
+            String sql2 = "SELECT * FROM configuration WHERE configuration_name = '" + configName + "'";
+
+
+            ResultSet rs2 = stmt.executeQuery(sql2);
+
+            while (rs2.next()) {
+
+                for (int i = 1; i <= numColumns; i++) {
+
+
+                    String columnName = metaData.getColumnName(i);
+                    allColumnNames.add(columnName);
+
+                    String columnValue = rs2.getString(i);
+                    columnValues.add(columnValue);
+
+
+                    Configuration temp2 = new Configuration(columnName, columnValue);
+
+                    editTab2TW.getItems().add(temp2);
+
+
+                }
+            }
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        TabPane.getSelectionModel().select(EditTab);
+
+    }
+
+    public void editMethod(ActionEvent b) throws IOException {
+
+
+        String url = "jdbc:sqlite:database.db";
+        if (columnNameTextField.getValue().isEmpty() || columnNameTextField1.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Input Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter both a attribute name and a new attribute value name.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection connection = DriverManager.getConnection(url);
+            String columnName = columnNameTextField.getValue();
+            String configName = columnNameTextField1.getText();
+
+            String updateSQL = "UPDATE configuration SET " + columnName + " = ? WHERE configuration_name = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
+
+            preparedStatement.setString(1, configName);
+            preparedStatement.setString(2, configNameTxt.getText());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                // Database update successful
+
+                // Refresh the TableView with updated data
+                ListConfig();
+
+
+                columnNameTextField1.clear();
+
+                root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
+                stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                // No rows affected, handle the update failure
+                System.out.println("Update failed. No rows affected.");
+            }
+
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void ListConfig() {
+        String url6 = "jdbc:sqlite:database.db";
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url6);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM configuration");
+
+            editConfigName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("configName"));
+            editConfigLang.setCellValueFactory(new PropertyValueFactory<Configuration, String>("language"));
+            editGivenInput.setCellValueFactory(new PropertyValueFactory<Configuration, String>("input"));
+
+
+            List<Configuration> data2 = new ArrayList<>();
+
+            while (rs.next()) {
+
+
+                String value1 = rs.getString("configuration_name");
+                String value2 = rs.getString("configuration_language");
+                String value3 = rs.getString("given_input");
+
+
+                data2.add(new Configuration(value1, value2, value3));
+
+            }
+            ObservableList<Configuration> ListPageData = FXCollections.observableArrayList(data2);
+            editPageTW.setItems(ListPageData);
+
+
+            conn.close();
+        } catch (SQLException | ClassNotFoundException a) {
+            a.printStackTrace();
+        }
+    }
+    @FXML
+    public void switchToConfig(ActionEvent e) throws IOException {
+
+        root = FXMLLoader.load(getClass().getResource("Configuration.fxml"));
+        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(true);
+    }
+
+    @FXML
+    public void switchToNewProject(ActionEvent e) throws IOException {
+
+        root = FXMLLoader.load(getClass().getResource("NewProject.fxml"));
+        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(true);
+    }
+
+    public void switchToEditConfig(ActionEvent a) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("editPage.fxml"));
+        stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(true);
+    }
+
+
 }
 
 
