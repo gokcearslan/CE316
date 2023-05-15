@@ -897,6 +897,90 @@ public class Controller implements Initializable {
         stage.show();
         stage.setResizable(true);
     }
+    public void deleteMethod(ActionEvent b) throws IOException {
+        String url = "jdbc:sqlite:database.db";
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection connection = DriverManager.getConnection(url);
+
+            String deleteSQL = "DELETE FROM configuration WHERE configuration_name = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement.setString(1, configNameTxt.getText());
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Row deleted successfully.");
+            } else {
+                System.out.println("No rows deleted. Check the config name.");
+            }
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
+        root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
+        stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    public static List<File> unzipAll(File directory) throws IOException {
+        List<File> extractedFiles = new ArrayList<>();
+
+
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("Provided path is not a directory: " + directory);
+        }
+
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            if (file.isFile() && file.getName().endsWith(".zip")) {
+                extractedFiles.addAll(unzip(file.getAbsolutePath()));
+            }
+        }
+
+        return extractedFiles;
+    }
+
+    public static List<File> unzip(String zipFilePath) throws IOException {
+        List<File> extractedFiles = new ArrayList<>();
+        Path zipFile = Paths.get(zipFilePath);
+        String destDir = zipFile.getParent().toString();
+        String zipFileName = zipFile.getFileName().toString();
+
+        try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(zipFile))) {
+            ZipEntry entry = zipIn.getNextEntry();
+            while (entry != null) {
+                String filePath = destDir + File.separator + zipFileName.replace(".zip", "") + File.separator + entry.getName();
+                if (!entry.isDirectory()) {
+                    extractedFiles.add(extractFile(zipIn, filePath));
+                } else {
+                    File dir = new File(filePath);
+                    dir.mkdir();
+                }
+                zipIn.closeEntry();
+                entry = zipIn.getNextEntry();
+            }
+        }
+
+        return extractedFiles;
+    }
+
+    private static File extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+        File file = new File(filePath);
+        file.getParentFile().mkdirs();
+        Files.copy(zipIn, file.toPath());
+        return file;
+    }
+}
 
 
 }
