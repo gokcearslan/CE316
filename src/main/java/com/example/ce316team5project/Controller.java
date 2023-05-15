@@ -531,7 +531,60 @@ public class Controller implements Initializable {
     }
 
 
-}
+    private void printProcessOutput(Process process) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            StringBuilder output = new StringBuilder();
+            String line;
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (!firstLine) {
+                    output.append(System.lineSeparator());
+                } else {
+                    firstLine = false;
+                }
+                output.append(line.trim());
+            }
+            String finalOutput = output.toString().trim();
+            outputArea.setText(finalOutput);
+            System.out.println(finalOutput);
+        }
+    }
+
+    public void openFileChooserAndReadFile() {
+        List<Integer> numbers = new ArrayList<>();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().toLowerCase().endsWith(".txt");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Text Files (*.txt)";
+            }
+        });
+
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
+                numbers = Arrays.stream(content.split("\\s+"))
+                        .filter(s -> !s.isEmpty())
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+
+                // Set the value of inputTxt using the content of the file
+                inputTxt.setText(content);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+
 
     public void createTable() {
 
