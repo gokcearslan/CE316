@@ -1,0 +1,534 @@
+package com.example.ce316team5project;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.sql.Statement;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import javax.swing.*;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.*;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+
+
+public class Controller implements Initializable {
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    @FXML
+    private TextField filePathBox;
+
+    @FXML
+    private TextArea outputArea;
+
+    @FXML
+    private TextField className;
+    @FXML
+    private TextField configName;
+    @FXML
+    private ChoiceBox<String> configurationBox = new ChoiceBox<>();
+    @FXML
+    private ChoiceBox<String> languageBox = new ChoiceBox<>();
+
+    @FXML
+    private TextField expectedOutputPathBox;
+
+    @FXML
+    private TextArea expectedOutputTxt;
+
+    @FXML
+    private TextArea inputTxt;
+
+    @FXML
+    private TableView<Student> ResultTW = new TableView<>();
+
+    @FXML
+    private TableColumn<Student, String> StudentResulTC = new TableColumn<>();
+
+    @FXML
+    private ChoiceBox<String> projectNameCB = new ChoiceBox<>();
+
+    @FXML
+    private TableColumn<Student, String> studentIDTC = new TableColumn<>();
+
+    @FXML
+    private TextField projectname = new TextField();
+    @FXML
+    private Button deneme;
+    @FXML
+    private TextField Studentid;
+    @FXML
+    private TabPane TabPane = new TabPane();
+
+    @FXML
+    private Tab EditTab = new Tab();
+
+    @FXML
+    private Tab ListTab = new Tab();
+
+    @FXML
+    private TextField configNameTxt = new TextField();
+
+    @FXML
+    private TableColumn<Configuration, String> editConfigLang = new TableColumn<>();
+
+    @FXML
+    private TableColumn<Configuration, String> editConfigName = new TableColumn<>();
+
+    @FXML
+    private TableColumn<Configuration, String> editGivenInput = new TableColumn<>();
+
+    @FXML
+    private TableView<Configuration> editPageTW = new TableView<>();
+
+    @FXML
+    private ChoiceBox<String> columnNameTextField = new ChoiceBox<>();
+
+    @FXML
+    private TextField columnNameTextField1;
+
+    @FXML
+    private TableColumn<Configuration, String> editAttributeName = new TableColumn<>();
+
+    @FXML
+    private TableColumn<Configuration, String> editAttributeValue = new TableColumn<>();
+
+
+    @FXML
+    private TableView<Configuration> editTab2TW = new TableView<>();
+    Configuration configuration = null;
+
+    ArrayList<Configuration> configurations = new ArrayList<>();
+
+    public void compileAndExecuteWithParameter(List<File> files) throws InterruptedException, IOException {
+
+        if (this.configuration != null) {
+            String configurationName = this.configuration.getInput();
+        } else {
+            System.out.println("Configuration is not initialized yet.");
+        }
+
+        for (File file : files) {
+            String filePath = file.getAbsolutePath();
+
+            // getConfiguration().setFilePath(filePath);
+            // System.out.println("filepath: " + getConfiguration().getFilePath());
+
+            ProcessBuilder compileProcessBuilder = null;
+//String inputListFromUser = getConfiguration().getInput();
+            String inputListFromUser = this.configuration.getInput();
+            System.out.println("input: " + inputListFromUser);
+
+            String[] numbers = inputListFromUser.split(" ");
+            List<String> executionArgs = new ArrayList<>(Arrays.asList(numbers));
+
+            if (getConfiguration().getLanguage().equals("Java")) {
+                System.out.println("language name: " + getConfiguration().getLanguage());
+                compileProcessBuilder = new ProcessBuilder("javac", filePath);
+                System.out.println("compileProcessBuilder " + "javac" + "" + filePath);
+            } else if (getConfiguration().getLanguage().equals("C")) {
+                compileProcessBuilder = new ProcessBuilder("gcc", "-o", "a.out", filePath);
+            } else if (getConfiguration().getLanguage().equals("Python")) {
+                // Python
+                compileProcessBuilder = new ProcessBuilder("python", filePath);
+
+            } else {
+                System.out.println("Language does not exists.");
+            }
+
+
+            // For Java and C
+            Process compileProcess = compileProcessBuilder.start();
+            compileProcess.waitFor();
+
+            // Check if the compilation process was successful
+            if (compileProcess.exitValue() != 0) {
+                printProcessErrors(compileProcess);
+                throw new RuntimeException("Compilation failed. Check the error stream for more details.");
+            }
+
+            // Execute the compiled file
+            ProcessBuilder executeProcessBuilder = new ProcessBuilder();
+            Process executeProcess;
+
+            if (getConfiguration().getLanguage().equals("Java")) {
+
+
+                String className = extractedClassName;
+                System.out.println("class name: " + extractedClassName);
+
+                executeProcessBuilder = new ProcessBuilder("java", className);
+                System.out.println("executeProcessBuilder: " + " java " + className);
+
+
+            } else if (getConfiguration().getLanguage().equals("C")) {
+
+                executeProcessBuilder = new ProcessBuilder("./a.out");
+
+            } else if (getConfiguration().getLanguage().equals("Python")) {
+                executeProcessBuilder = new ProcessBuilder("python", filePath);
+
+            }
+
+
+            executeProcessBuilder.directory(new File(filePath).getParentFile());
+            executeProcessBuilder.command().addAll(executionArgs);
+            executeProcess = executeProcessBuilder.start();
+
+
+   /* File file = new File(filePath);
+    String castPath = file.getParent();
+    executeProcessBuilder.directory(new File(castPath));
+    executeProcessBuilder.command().addAll(executionArgs); // Add this line
+    Process executeProcess = executeProcessBuilder.start();
+
+    */
+
+            // Check if the execution process was successful
+            if (executeProcess.waitFor() != 0) {
+                printProcessErrors(executeProcess);
+                throw new RuntimeException("Execution failed. Check the error stream for more details.");
+            }
+            // Output the result of the execution
+
+            printProcessOutput(executeProcess);
+
+
+            //Buraya eklenir
+
+            //String studentId = studentIdTextField.getText(); // Replace studentIdTextField with the actual TextField object for the student ID
+
+
+
+            String filePathid = file.getAbsolutePath();
+            int lastSeparatorIndex = filePathid.lastIndexOf(File.separator);
+            // Assuming the student ID is always the folder name before the last separator
+            int secondLastSeparatorIndex = filePathid.lastIndexOf(File.separator, lastSeparatorIndex - 1);
+            String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
+            System.out.println("student id: " + studentId);
+
+
+            String projectName = projectname.getText();
+            String studentSourceCodePath = filePathid; // Assuming filePathBox already contains the student's source code file path
+            String studentoutput = outputArea.getText();
+            String expectedOutput2 = expectedOutputTxt.getText();
+            String configname = configurationBox.getValue();
+            saveProjectDetails(projectName, studentSourceCodePath);
+            if (studentoutput == null) {
+                studentoutput = "";
+            }
+
+            //save to project table
+
+            try {
+                // Load SQLite JDBC driver
+                Class.forName("org.sqlite.JDBC");
+
+                // Connect to the database
+                connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+                // Check if the record already exists
+                String query = "SELECT COUNT(*) FROM projects WHERE student_id = ? AND project_name = ? AND student_scr = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, studentId);
+                statement.setString(2, projectName);
+                statement.setString(3, studentSourceCodePath);
+
+                ResultSet resultSet = statement.executeQuery();
+                int count = resultSet.getInt(1);
+                resultSet.close();
+                statement.close();
+
+                if (count == 0) {
+                    // Insert the new record
+                    String insertProjectSQL = "INSERT INTO projects(project_name, student_scr, student_output, expected_output, configuration_name, student_id) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
+                    pstmtProject.setString(1, projectName);
+                    pstmtProject.setString(2, studentSourceCodePath);
+                    pstmtProject.setString(3, studentoutput);
+                    pstmtProject.setString(4, expectedOutput2);
+                    pstmtProject.setString(5, configname);
+                    pstmtProject.setString(6, studentId);
+
+                    pstmtProject.executeUpdate();
+                    pstmtProject.close();
+
+                    System.out.println("Record inserted.");
+                } else {
+                    System.out.println("The combination of student_id, project_name, and student_scr already exists.");
+                }
+
+                connection.close();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            //save to student table
+
+            // Replace projectNameTextField with the actual TextField object for the project name
+            String studentOutput = outputArea.getText(); // Replace with the actual file path
+            String studentResult;
+            String expectedOutput = expectedOutputTxt.getText();
+
+            if (studentOutput == null) {
+                studentResult = "NULL";
+            } else if (studentOutput.equals(expectedOutput)) {
+                studentResult = "Success";
+            } else {
+                studentResult = "Failure";
+            }
+
+
+            try {
+                // Load SQLite JDBC driver
+                Class.forName("org.sqlite.JDBC");
+
+                // Connect to the database
+                connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+                // Check if the record already exists
+                String query = "SELECT COUNT(*) FROM " + "student" + " WHERE student_id = ? AND project_name = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, studentId);
+                statement.setString(2, projectName);
+
+                ResultSet resultSet = statement.executeQuery();
+                int count = resultSet.getInt(1);
+                resultSet.close();
+                statement.close();
+
+                if (count == 0) {
+                    // Insert the new record
+                    String insertQuery = "INSERT INTO " + "student" + " (student_id, student_result,project_name) VALUES (?, ?, ?)";
+                    PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+                    insertStatement.setString(1, studentId);
+                    insertStatement.setString(2, studentResult);
+                    insertStatement.setString(3, projectName);
+
+                    insertStatement.executeUpdate();
+                    insertStatement.close();
+
+                    System.out.println("Record inserted.");
+                } else {
+                    System.out.println("The combination of student_id and project_name already exists.");
+                }
+
+                connection.close();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void loadConfigurationNames() {
+        // Check if the connection is null
+        if (this.connection == null) {
+            try {
+                // Establish a connection to your database
+                this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            } catch (SQLException e) {
+                System.out.println("Failed to connect to the database");
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
+
+        String sql = "SELECT configuration_name FROM configuration";
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // Clear the ChoiceBox
+            configurationBox.getItems().clear();
+
+            ArrayList<String> configNames = new ArrayList<>();
+            // loop through the result set
+            while (rs.next()) {
+                String configurationName = rs.getString("configuration_name");
+                configNames.add(configurationName);
+            }
+            configurationBox.getItems().addAll(configNames);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Configuration getConfiguration() {
+
+        String config = configurationBox.getValue();
+
+        Configuration configuration = null;
+        String sql = "SELECT configuration_name, configuration_language, given_input FROM configuration WHERE configuration_name = ?";
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            // Set the value
+            pstmt.setString(1, config);
+            ResultSet rs = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                String configurationName = rs.getString("configuration_name");
+                String configurationLanguage = rs.getString("configuration_language");
+                String givenInput = rs.getString("given_input");
+                this.configuration = new Configuration(configurationLanguage, configurationName, givenInput);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return this.configuration;
+    }
+
+    private List<String> getArgumentsList() {
+        List<String> argsList = new ArrayList<>();
+        String[] args = inputTxt.getText().split(" ");
+        for (String arg : args) {
+            if (!arg.isEmpty()) {
+                argsList.add(arg);
+            }
+        }
+        return argsList;
+    }
+
+    public void setCommands(String language, String className, String configName) {
+
+
+        if (language.equals("Java")) {
+            configuration = new Configuration(language, "javac", className, configName);
+            configuration.setLanguage(language);
+            configuration.setClassName(className);
+            configuration.setConfigName(configName);
+
+        } else if (language.equals("C")) {
+            configuration = new Configuration(language, "gcc", null, configName);
+            configuration.setLanguage(language);
+            configuration.setConfigName(configName);
+
+        } else if (language.equals("Python")) {
+            configuration = new Configuration(language, "python", null, configName);
+            configuration.setLanguage(language);
+            configuration.setConfigName(configName);
+        }
+        configurations.add(configuration);
+
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String insertSQL = "INSERT INTO configuration(configuration_name, configuration_language, given_input) VALUES (?, ?, ?)";
+        try {
+            // Assuming connection is a valid Connection object
+            PreparedStatement pstmt = connection.prepareStatement(insertSQL);
+            pstmt.setString(1, configName);
+            pstmt.setString(2, language);
+
+
+// Assume argsList is filled with elements
+            String result = String.join(" ", getArgumentsList());
+            pstmt.setString(3, result);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public List<File> chooseFile() throws IOException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        // Set the title for the dialog
+        directoryChooser.setTitle("Select Project Directory");
+
+        // Show the open directory dialog and store the selected directory in a variable
+        File selectedParentDirectory = directoryChooser.showDialog(null);
+
+        List<File> selectedFiles = unzipAll(selectedParentDirectory);
+
+        if (selectedParentDirectory != null) {
+            File[] directories = selectedParentDirectory.listFiles(File::isDirectory);
+            if (directories != null) {
+                for (File dir : directories) {
+                    try {
+                        // Walk the directory and find all .java, .c, and .py files
+                        Files.walk(dir.toPath())
+                                .filter(path -> path.toString().endsWith(".java") || path.toString().endsWith(".c") || path.toString().endsWith(".py"))
+                                .forEach(path -> selectedFiles.add(path.toFile()));
+                    } catch (IOException e) {
+                        System.err.println("Error walking directory: " + e.getMessage());
+                    }
+                }
+            }
+
+            if (!selectedFiles.isEmpty()) {
+                for (File selectedFile : selectedFiles) {
+                    String selectedLanguage = getConfiguration().getLanguage();
+
+                    if (selectedFile.getName().endsWith(".zip")) {
+                        try {
+                            selectedFile = unzipFile(selectedFile);
+                        } catch (IOException e) {
+                            System.err.println("Error unzipping file: " + e.getMessage());
+                        }
+                    }
+
+                    filePathBox.setText(selectedFile.getAbsolutePath());
+
+                    if (getConfiguration().getLanguage().equalsIgnoreCase("Java")) {
+                        // Extract the class name from the file content
+                        extractedClassName = extractClassName(selectedFile);
+                    }
+                }
+              /*  // Handle the extraction of studentId here outside the loop.
+                String filePathid = filePathBox.getText();
+                int lastSeparatorIndex = filePathid.lastIndexOf('\\');
+
+                // Assuming the student ID is always the folder name before the last separator
+                int secondLastSeparatorIndex = filePathid.lastIndexOf('\\', lastSeparatorIndex - 1);
+                String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
+                extractedStudentID=studentId;
+
+                System.out.println(studentId);
+                Studentid.setText(studentId);
+
+               */
+
+            }
+        }
+        return selectedFiles;
+    }
+
+
+}

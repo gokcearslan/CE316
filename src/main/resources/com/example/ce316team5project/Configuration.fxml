@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+   <children>
+      <HBox centerShape="false" prefHeight="181.0" prefWidth="600.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefHeight="25.0" prefWidth="107.0" text="Choose Language: ">
+               <HBox.margin>
+                  <Insets left="190.0" top="50.0" />
+               </HBox.margin>
+            </Label>
+            <ChoiceBox fx:id="languageBox" centerShape="false" prefHeight="25.0" prefWidth="139.0">
+               <HBox.margin>
+                  <Insets top="50.0" />
+               </HBox.margin>
+            </ChoiceBox>
+         </children>
+      </HBox>
+      <HBox layoutX="83.0" layoutY="99.0" prefHeight="103.0" prefWidth="600.0" AnchorPane.bottomAnchor="311.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <Label prefHeight="24.0" prefWidth="100.0" text="Enter config name ">
+               <HBox.margin>
+                  <Insets left="190.0" top="50.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="configName" prefHeight="25.0" prefWidth="143.0">
+               <HBox.margin>
+                  <Insets top="50.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox layoutX="14.0" layoutY="320.0" prefHeight="161.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="320.0">
+         <children>
+            <VBox prefHeight="143.0" prefWidth="500.0">
+               <children>
+                  <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#createConfiguration" prefHeight="25.0" prefWidth="127.0" text="create configuration">
+                     <VBox.margin>
+                        <Insets left="300.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="25.0" prefWidth="147.0" text="Go to Edit Page">
+                     <VBox.margin>
+                        <Insets left="340.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Go Project Creation Page">
+                     <VBox.margin>
+                        <Insets left="340.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Go to Welcome Page">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="340.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets left="100.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox layoutX="-2.0" layoutY="203.0" prefHeight="86.0" prefWidth="600.0">
+         <children>
+            <Label prefHeight="25.0" prefWidth="32.0" text="Input ">
+               <HBox.margin>
+                  <Insets left="10.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+            <Button fx:id="deneme1" mnemonicParsing="false" onAction="#openFileChooserAndReadFile" prefHeight="25.0" prefWidth="115.0" text="choose input file">
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
+            </Button>
+            <VBox prefHeight="87.0" prefWidth="160.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="139.0" text="or Enter inputs manually ">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label prefHeight="17.0" prefWidth="205.0" text=" with a space between each">
+                     <VBox.margin>
+                        <Insets left="9.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <TextArea fx:id="inputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="87.0" prefWidth="273.0">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </TextArea>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
