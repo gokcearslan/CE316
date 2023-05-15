@@ -532,3 +532,180 @@ public class Controller implements Initializable {
 
 
 }
+
+    public void createTable() {
+
+        if (!isSetupDone) {
+            try {
+                // Create a connection
+                connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+                // Create a Statement
+                Statement statement = connection.createStatement();
+                // Create a new table
+                String configSql = "CREATE TABLE IF NOT EXISTS configuration(" +
+                        "configuration_language TEXT NOT NULL," +
+                        "configuration_name TEXT PRIMARY KEY," +
+                        "given_input TEXT)";
+                statement.execute(configSql);
+                System.out.println("Table config created successfully");
+
+                String createTableSQL = "CREATE TABLE IF NOT EXISTS projects (" +
+                        "project_name TEXT(50)  NOT NULL," +
+                        "student_scr TEXT(100) NOT NULL ," +
+                        "student_output TEXT(100) NOT NULL," +
+                        "expected_output TEXT(100) NOT NULL," +
+                        "configuration_name TEXT," +
+                        "student_id VARCHAR(50)  NOT NULL," +
+                        "FOREIGN KEY (configuration_name) REFERENCES configuration(configuration_name)," +
+                        "FOREIGN KEY (project_name, student_id) REFERENCES student(project_name, student_id)" + // Added foreign key constraint
+                        ")";
+                statement.execute(createTableSQL);
+                System.out.println("Table createTableSQL created successfully");
+
+                String studentTable = "CREATE TABLE IF NOT EXISTS student (" +
+                        "student_id VARCHAR(50)  NOT NULL," +
+                        "student_result BOOLEAN NOT NULL," +
+                        "project_name TEXT(50) NOT NULL," +
+                        "PRIMARY KEY (student_id, project_name)" + // Added composite primary key
+                        ")";
+                statement.execute(studentTable);
+                System.out.println("Table studentTable created successfully");
+                isSetupDone = true;
+
+
+                // Close the statement
+                statement.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        createTable();
+        languageBox.getItems().addAll("Java", "C", "Python");
+        loadConfigurationNames();
+
+        columnNameTextField.getItems().addAll("configuration_name", "given_input");
+        loadConfigurationNames();
+        createTable();
+        ListConfig();
+        ListStudentResults();
+
+
+        // projectNameCB
+
+
+        try {
+
+            // Load the SQLite JDBC driver
+            Class.forName("org.sqlite.JDBC");
+
+            // Establish a connection to the database
+            String url = "jdbc:sqlite:database.db";
+            Connection connection = DriverManager.getConnection(url);
+
+            String query = "SELECT DISTINCT project_name FROM student";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ObservableList<String> projectNames = FXCollections.observableArrayList();
+
+
+            studentIDTC.setCellValueFactory(new PropertyValueFactory<>("student_id"));
+
+            StudentResulTC.setCellValueFactory(new PropertyValueFactory<>("student_result"));
+
+            ObservableList<Student> students = FXCollections.observableArrayList();
+            ResultTW.setItems(students);
+
+            while (resultSet.next()) {
+                String projectName = resultSet.getString("project_name");
+                projectNames.add(projectName);
+            }
+
+            resultSet.close();
+            statement.close();
+
+            projectNameCB.setItems(projectNames);
+
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+    public void saveProjectDetails(String projectName, String studentSourceCodePath) {
+        // Insert the projectName, studentId, and studentSourceCodePath into the projects table
+        String insertProjectSQL = "INSERT INTO projects(project_name, student_scr) VALUES (?, ?)";
+        try {
+            PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
+            pstmtProject.setString(1, projectName);
+            pstmtProject.setString(2, studentSourceCodePath);
+            //pstmtProject.setString(3, studentId);
+            pstmtProject.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private String extractClassName(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Pattern pattern = Pattern.compile("class\\s+(\\w+)");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    return matcher.group(1);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+        return null;
+    }
+    public void ListStudentResults() {
+
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+
+
+            String url = "jdbc:sqlite:database.db";
+            Connection connection = DriverManager.getConnection(url);
+
+
+            String projectName =projectNameCB.getValue(); // get the project name from the choice box
+
+            String query = "SELECT student_id, student_result FROM student WHERE project_name = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, projectName);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ObservableList<Student> data = FXCollections.observableArrayList();
+
+            while (resultSet.next()) {
+                String studentId = resultSet.getString("student_id");
+                String studentResult = resultSet.getString("student_result");
+
+                data.add(new Student(studentId, studentResult));
+            }
+
+            resultSet.close();
+            statement.close();
+
+            ResultTW.setItems(data);
+
+            connection.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+
+
