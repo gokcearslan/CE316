@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+   <children>
+      <HBox prefHeight="44.0" prefWidth="629.0" AnchorPane.bottomAnchor="404.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefHeight="25.0" prefWidth="75.0" text="Project Name:">
+               <HBox.margin>
+                  <Insets left="50.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="projectname">
+               <HBox.margin>
+                  <Insets left="50.0" top="10.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox layoutY="57.0" prefHeight="76.0" prefWidth="608.0" AnchorPane.bottomAnchor="343.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Label prefHeight="27.0" prefWidth="114.0" text="Choose configuration">
+               <HBox.margin>
+                  <Insets left="50.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <ChoiceBox fx:id="configurationBox" prefWidth="150.0">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="30.0" top="5.0" />
+               </HBox.margin>
+            </ChoiceBox>
+            <Label text="or">
+               <HBox.margin>
+                  <Insets left="30.0" top="8.0" />
+               </HBox.margin>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#switchToConfig" text="Create Configuration">
+               <HBox.margin>
+                  <Insets left="40.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <HBox layoutX="7.0" layoutY="96.0" prefHeight="76.0" prefWidth="600.0" AnchorPane.bottomAnchor="304.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <Label prefHeight="26.0" prefWidth="135.0" text="Source code file address: ">
+               <HBox.margin>
+                  <Insets left="200.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="filePathBox">
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox layoutX="3.0" layoutY="139.0" prefHeight="100.0" prefWidth="626.0" AnchorPane.bottomAnchor="243.0" AnchorPane.topAnchor="139.0">
+         <children>
+            <Label prefHeight="24.0" prefWidth="87.0" text="Expected output">
+               <HBox.margin>
+                  <Insets left="50.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#openFileChooserAndReadFiles" text="read output file">
+               <HBox.margin>
+                  <Insets left="45.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+            <Label text="or">
+               <HBox.margin>
+                  <Insets left="60.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+            <TextArea fx:id="expectedOutputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="163.0">
+               <HBox.margin>
+                  <Insets left="60.0" top="5.0" />
+               </HBox.margin>
+            </TextArea>
+         </children>
+      </HBox>
+      <HBox layoutX="-6.0" layoutY="210.0" prefHeight="69.0" prefWidth="629.0" AnchorPane.leftAnchor="-6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="210.0">
+         <children>
+            <Label text="Executed output">
+               <HBox.margin>
+                  <Insets left="50.0" top="40.0" />
+               </HBox.margin>
+            </Label>
+            <TextArea fx:id="outputArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="315.0">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </TextArea>
+         </children>
+      </HBox>
+      <VBox layoutX="371.0" layoutY="301.0" prefHeight="144.0" prefWidth="243.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#executeAll" text="Choose student files and Run">
+               <VBox.margin>
+                  <Insets left="20.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Create New Configuration">
+               <VBox.margin>
+                  <Insets left="70.0" top="15.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Go Project Creation Page">
+               <VBox.margin>
+                  <Insets left="70.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Go to Welcome Page">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="70.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
