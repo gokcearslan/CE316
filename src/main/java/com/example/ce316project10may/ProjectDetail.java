@@ -1,7 +1,5 @@
 package com.example.ce316project10may;
 
-import javafx.beans.property.SimpleStringProperty;
-
 public class ProjectDetail {
     private final String projectName;
     private final String studentId;

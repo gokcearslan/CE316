@@ -38,21 +38,12 @@ public class Controller implements Initializable {
     private Parent root;
     @FXML
     private TextField filePathBox;
-
-    @FXML
-    private TextArea outputArea;
-
-    @FXML
-    private TextField className;
     @FXML
     private TextField configName;
     @FXML
     private ChoiceBox<String> configurationBox = new ChoiceBox<>();
     @FXML
     private ChoiceBox<String> languageBox = new ChoiceBox<>();
-
-    @FXML
-    private TextField expectedOutputPathBox;
 
     @FXML
     private TextArea expectedOutputTxt;
@@ -74,10 +65,7 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField projectname = new TextField();
-    @FXML
-    private Button deneme;
-    @FXML
-    private TextField Studentid;
+
     @FXML
     private TabPane TabPane = new TabPane();
 
@@ -134,33 +122,29 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<ProjectDetail, String> studentResultCol=new TableColumn<>();
 
-    @FXML
-    private ChoiceBox<String> ProjectNameCb;
     Configuration configuration = null;
 
     ArrayList<Configuration> configurations = new ArrayList<>();
 
+    private boolean hasError=false;
 
     public void compileAndExecuteWithParameter(List<File> files) throws InterruptedException, IOException {
 
         List<String> erroredFiles = new ArrayList<>();
 
-
-            if (this.configuration != null) {
+        if (this.configuration != null) {
                 String configurationName = this.configuration.getInput();
             } else {
                 System.out.println("Configuration is not initialized yet.");
             }
 
             for (File file : files) {
+                String studentOutputForError = "";
+
                 try {
                     String filePath = file.getAbsolutePath();
 
-                    // getConfiguration().setFilePath(filePath);
-                    // System.out.println("filepath: " + getConfiguration().getFilePath());
-
                     ProcessBuilder compileProcessBuilder = null;
-                    //String inputListFromUser = getConfiguration().getInput();
                     String inputListFromUser = this.configuration.getInput();
                     System.out.println("input: " + inputListFromUser);
 
@@ -181,13 +165,13 @@ public class Controller implements Initializable {
                         System.out.println("Language does not exists.");
                     }
 
-
                     // For Java and C
                     Process compileProcess = compileProcessBuilder.start();
                     compileProcess.waitFor();
 
                     if (compileProcess.exitValue() != 0) {
                         printProcessErrors(compileProcess);
+                        studentOutputForError = "Compilation failed";
                         throw new RuntimeException("Compilation failed. Check the error stream for more details.");
                     }
 
@@ -221,17 +205,24 @@ public class Controller implements Initializable {
                     // Check if the execution process was successful
                     if (executeProcess.waitFor() != 0) {
                         printProcessErrors(executeProcess);
+                        studentOutputForError = "Execution failed";
                         throw new RuntimeException("Execution failed. Check the error stream for more details.");
+
                     }
 
-                    printProcessOutput(executeProcess);
+                    else{
+                        //if there is no error
+                       studentOutputForError= printProcessOutput(executeProcess);
+
+                    }
+
                 }
-                catch (RuntimeException e) {
+
+                catch (RuntimeException | IOException e) {
                     System.err.println("Error compiling/running file: " + file.getAbsolutePath());
                     e.printStackTrace();
                     erroredFiles.add(file.getAbsolutePath());
-
-                    continue;
+                    this.hasError = true;
                 }
 
                 if (!erroredFiles.isEmpty()) {
@@ -241,25 +232,27 @@ public class Controller implements Initializable {
                     }
                 }
 
-
+                if(hasError && studentOutputForError.isEmpty()) {
+                    studentOutputForError = "Error occurred but couldn't specify if during compilation or execution";
+                }
 
                 String filePathid = file.getAbsolutePath();
                 int lastSeparatorIndex = filePathid.lastIndexOf(File.separator);
-                // Assuming the student ID is always the folder name before the last separator
                 int secondLastSeparatorIndex = filePathid.lastIndexOf(File.separator, lastSeparatorIndex - 1);
                 String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
-                System.out.println("student id: " + studentId);
 
+                System.out.println("student id: " + studentId);
 
                 String projectName = projectname.getText();
                 String studentSourceCodePath = filePathid;
-                String studentoutput = outputArea.getText();
                 String expectedOutput2 = expectedOutputTxt.getText();
                 String configname = configurationBox.getValue();
                 saveProjectDetails(projectName, studentSourceCodePath);
-                if (studentoutput == null) {
-                    studentoutput = "";
+
+                if(studentOutputForError==null){
+                    studentOutputForError="NULL";
                 }
+
 
                 //save to project table
 
@@ -268,7 +261,7 @@ public class Controller implements Initializable {
 
                     connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 
-                    String query = "SELECT COUNT(*) FROM projects WHERE student_id = ? AND project_name = ? AND student_scr = ?";
+                    String query = "SELECT COUNT(*) FROM projects WHERE student_id = ? AND project_name = ? AND student_src = ?";
                     PreparedStatement statement = connection.prepareStatement(query);
                     statement.setString(1, studentId);
                     statement.setString(2, projectName);
@@ -280,11 +273,11 @@ public class Controller implements Initializable {
                     statement.close();
 
                     if (count == 0) {
-                        String insertProjectSQL = "INSERT INTO projects(project_name, student_scr, student_output, expected_output, configuration_name, student_id) VALUES (?, ?, ?, ?, ?, ?)";
+                        String insertProjectSQL = "INSERT INTO projects(project_name, student_src, student_output, expected_output, configuration_name, student_id) VALUES (?, ?, ?, ?, ?, ?)";
                         PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
                         pstmtProject.setString(1, projectName);
                         pstmtProject.setString(2, studentSourceCodePath);
-                        pstmtProject.setString(3, studentoutput);
+                        pstmtProject.setString(3, studentOutputForError);
                         pstmtProject.setString(4, expectedOutput2);
                         pstmtProject.setString(5, configname);
                         pstmtProject.setString(6, studentId);
@@ -294,7 +287,7 @@ public class Controller implements Initializable {
 
                         System.out.println("Record inserted.");
                     } else {
-                        System.out.println("The combination of student_id, project_name, and student_scr already exists.");
+                        System.out.println("The combination of student_id, project_name, and student_src already exists.");
                     }
 
                     connection.close();
@@ -305,14 +298,16 @@ public class Controller implements Initializable {
                 }
                 //save to student table
 
-                String studentOutput = outputArea.getText();
                 String studentResult;
                 String expectedOutput = expectedOutputTxt.getText();
 
-                if (studentOutput == null) {
+
+                if (studentOutputForError == null) {
                     studentResult = "NULL";
-                } else if (studentOutput.equals(expectedOutput)) {
+                } else if (studentOutputForError.equals(expectedOutput)) {
                     studentResult = "Success";
+                } else if(hasError){
+                    studentResult = studentOutputForError;  // If an error occurred, set studentResult to the error message
                 } else {
                     studentResult = "Failure";
                 }
@@ -347,7 +342,6 @@ public class Controller implements Initializable {
                     } else {
                         System.out.println("The combination of student_id and project_name already exists.");
                     }
-
                     connection.close();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -379,7 +373,6 @@ public class Controller implements Initializable {
             configurationBox.getItems().clear();
 
             ArrayList<String> configNames = new ArrayList<>();
-            // loop through the result set
             while (rs.next()) {
                 String configurationName = rs.getString("configuration_name");
                 configNames.add(configurationName);
@@ -429,17 +422,10 @@ public class Controller implements Initializable {
         return argsList;
     }
 
-    public void handleSaveProjectDetailsButtonAction() {
-        String projectName = projectname.getText();
-
-        String studentSourceCodePath = filePathBox.getText();
-
-        saveProjectDetails(projectName, studentSourceCodePath);
-    }
 
     public void saveProjectDetails(String projectName, String studentSourceCodePath) {
-        // Insert the projectName, studentId, and studentSourceCodePath into the projects table
-        String insertProjectSQL = "INSERT INTO projects(project_name, student_scr) VALUES (?, ?)";
+
+        String insertProjectSQL = "INSERT INTO projects(project_name, student_src) VALUES (?, ?)";
         try {
             PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
             pstmtProject.setString(1, projectName);
@@ -481,7 +467,6 @@ public class Controller implements Initializable {
 
         String insertSQL = "INSERT INTO configuration(configuration_name, configuration_language, given_input) VALUES (?, ?, ?)";
         try {
-            // Assuming connection is a valid Connection object
             PreparedStatement pstmt = connection.prepareStatement(insertSQL);
             pstmt.setString(1, configName);
             pstmt.setString(2, language);
@@ -540,20 +525,6 @@ public class Controller implements Initializable {
                         extractedClassName = extractClassName(selectedFile);
                     }
                 }
-              /*
-                String filePathid = filePathBox.getText();
-                int lastSeparatorIndex = filePathid.lastIndexOf('\\');
-
-                // Assuming the student ID is always the folder name before the last separator
-                int secondLastSeparatorIndex = filePathid.lastIndexOf('\\', lastSeparatorIndex - 1);
-                String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
-                extractedStudentID=studentId;
-
-                System.out.println(studentId);
-                Studentid.setText(studentId);
-
-               */
-
             }
         }
         return selectedFiles;
@@ -568,9 +539,12 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         }
+
     }
 
     public void executeAll() throws IOException {
+        
+        
         String project_name = projectname.getText();
         if (project_name == null || project_name.trim().isEmpty()||configurationBox.getValue()==null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -583,10 +557,14 @@ public class Controller implements Initializable {
             List<File> selectedFiles = chooseFile();
             executeFiles(selectedFiles);
         }
-
+        filePathBox.clear();
+        configurationBox.getSelectionModel().clearSelection();
+        projectname.clear();
+        expectedOutputTxt.clear();
     }
 
-    private void printProcessOutput(Process process) throws IOException {
+    private String printProcessOutput(Process process) throws IOException {
+        String finalOutput;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             StringBuilder output = new StringBuilder();
             String line;
@@ -599,10 +577,11 @@ public class Controller implements Initializable {
                 }
                 output.append(line.trim());
             }
-            String finalOutput = output.toString().trim();
-            outputArea.setText(finalOutput);
+             finalOutput = output.toString().trim();
             System.out.println(finalOutput);
+
         }
+        return finalOutput ;
     }
 
     private static void printProcessErrors(Process process) throws IOException {
@@ -648,7 +627,7 @@ public class Controller implements Initializable {
                         "configuration_name TEXT," +
                         "student_id VARCHAR(50)  NOT NULL," +
                         "FOREIGN KEY (configuration_name) REFERENCES configuration(configuration_name)," +
-                        "FOREIGN KEY (project_name, student_id) REFERENCES student(project_name, student_id)" + // Added foreign key constraint
+                        "FOREIGN KEY (project_name, student_id) REFERENCES student(project_name, student_id)" +
                         ")";
                 statement.execute(createTableSQL);
                 System.out.println("Table createTableSQL created successfully");
@@ -657,7 +636,7 @@ public class Controller implements Initializable {
                         "student_id VARCHAR(50)  NOT NULL," +
                         "student_result BOOLEAN NOT NULL," +
                         "project_name TEXT(50) NOT NULL," +
-                        "PRIMARY KEY (student_id, project_name)" + // Added composite primary key
+                        "PRIMARY KEY (student_id, project_name)" +
                         ")";
                 statement.execute(studentTable);
                 System.out.println("Table studentTable created successfully");
@@ -720,20 +699,20 @@ public class Controller implements Initializable {
         createTable();
         languageBox.getItems().addAll("Java", "C", "Python");
         loadConfigurationNames();
-
         columnNameTextField.getItems().addAll("configuration_name", "given_input");
+
         loadConfigurationNames();
         createTable();
         ListConfig();
         ListStudentResults();
-loadProjectNames();
+        loadProjectNames();
+
         ProjectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
         StudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         ConfigNameColumn.setCellValueFactory(new PropertyValueFactory<>("configName"));
         StudentOutputColumn.setCellValueFactory(new PropertyValueFactory<>("studentOutput"));
         ExpectedOutputColumn.setCellValueFactory(new PropertyValueFactory<>("expectedOutput"));
         studentResultCol.setCellValueFactory(new PropertyValueFactory<>("studentResult"));
-
 
 
         projectNameCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -780,8 +759,6 @@ loadProjectNames();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
 
     }
 

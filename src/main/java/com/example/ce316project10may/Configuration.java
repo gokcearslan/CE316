@@ -1,8 +1,5 @@
 package com.example.ce316project10may;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Configuration {
 
     private String filePath;
@@ -13,8 +10,6 @@ public class Configuration {
     private String configName;
     private String input;
     private String projectName;
-    // ...
-    // Add a getter and setter for the projectName property
     public String getProjectName() {
         return projectName;
     }

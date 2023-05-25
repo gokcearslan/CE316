@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="500.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <HBox layoutX="3.0" layoutY="376.0" prefHeight="121.0" prefWidth="629.0" />
       <HBox prefHeight="44.0" prefWidth="629.0" AnchorPane.bottomAnchor="404.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -71,51 +71,41 @@
             </TextField>
          </children>
       </HBox>
-      <HBox layoutX="3.0" layoutY="139.0" prefHeight="100.0" prefWidth="626.0" AnchorPane.bottomAnchor="243.0" AnchorPane.topAnchor="139.0">
+      <HBox layoutX="3.0" layoutY="139.0" prefHeight="127.0" prefWidth="719.0" AnchorPane.bottomAnchor="249.0" AnchorPane.topAnchor="139.0">
          <children>
-            <Label prefHeight="24.0" prefWidth="87.0" text="Expected output">
+            <Label prefHeight="24.0" prefWidth="176.0" text="Expected output">
                <HBox.margin>
                   <Insets left="50.0" top="20.0" />
                </HBox.margin>
             </Label>
-            <Button mnemonicParsing="false" onAction="#openFileChooserAndReadFiles" text="read output file">
+            <Button mnemonicParsing="false" onAction="#openFileChooserAndReadFiles" prefHeight="31.0" prefWidth="198.0" text="read output file">
                <HBox.margin>
                   <Insets left="45.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Label text="or">
+            <Label prefHeight="18.0" prefWidth="214.0" text="or enter inputs manually ">
                <HBox.margin>
                   <Insets left="60.0" top="20.0" />
                </HBox.margin>
             </Label>
-            <TextArea fx:id="expectedOutputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="163.0">
+            <TextArea fx:id="expectedOutputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="57.0" prefWidth="147.0">
                <HBox.margin>
                   <Insets left="60.0" top="5.0" />
                </HBox.margin>
             </TextArea>
          </children>
       </HBox>
-      <HBox layoutY="215.0" prefHeight="169.0" prefWidth="726.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="215.0">
+      <HBox layoutX="189.0" layoutY="211.0" prefHeight="197.0" prefWidth="346.0" AnchorPane.leftAnchor="189.0" AnchorPane.rightAnchor="192.0" AnchorPane.topAnchor="211.0">
          <children>
-            <TableView fx:id="ResultTW" prefHeight="169.0" prefWidth="346.0">
+            <TableView fx:id="ResultTW" prefHeight="186.0" prefWidth="350.0">
               <columns>
                 <TableColumn fx:id="studentIDTC" prefWidth="193.99996948242188" text="Student ID" />
                 <TableColumn fx:id="StudentResulTC" prefWidth="150.66668701171875" text="Result" />
               </columns>
             </TableView>
-            <Label text="Executed output">
-               <HBox.margin>
-                  <Insets left="50.0" top="40.0" />
-               </HBox.margin>
-            </Label>
-            <TextArea fx:id="outputArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="126.0">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </TextArea>
          </children>
       </HBox>
-      <VBox layoutX="501.0" layoutY="388.0" prefHeight="127.0" prefWidth="225.0">
+      <VBox layoutX="519.0" layoutY="416.0" prefHeight="99.0" prefWidth="208.0">
          <children>
             <Button mnemonicParsing="false" onAction="#executeAll" prefHeight="25.0" prefWidth="186.0" text="Choose student files and Run" />
          </children>

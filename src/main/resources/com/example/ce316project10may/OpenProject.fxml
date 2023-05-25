@@ -7,17 +7,17 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="481.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="481.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <ChoiceBox fx:id="projectNameCB" layoutX="24.0" layoutY="34.0" prefWidth="150.0" />
-      <TableView fx:id="OpenProjectTable" layoutX="4.0" layoutY="67.0" prefHeight="361.0" prefWidth="669.0">
+      <TableView fx:id="OpenProjectTable" layoutX="12.0" layoutY="71.0" prefHeight="361.0" prefWidth="669.0">
         <columns>
           <TableColumn fx:id="ProjectNameColumn" prefWidth="110.0" text="Project Name" />
           <TableColumn fx:id="StudentIdColumn" prefWidth="110.0" text="Student ID" />
             <TableColumn fx:id="ConfigNameColumn" prefWidth="110.0" text="Config Name" />
             <TableColumn fx:id="StudentOutputColumn" prefWidth="110.0" text="Student Output" />
             <TableColumn fx:id="ExpectedOutputColumn" prefWidth="110.0" text="Expected Output" />
-            <TableColumn fx:id="studentResultCol" prefWidth="110.0" text="Student Result" />
+            <TableColumn fx:id="studentResultCol" prefWidth="116.80001220703127" text="Student Result" />
         </columns>
       </TableView>
       <Label layoutX="24.0" layoutY="14.0" text="Select project name to open:" />
