@@ -14,6 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.awt.event.MouseEvent;
 import java.sql.Statement;
 import java.io.*;
 import java.net.URL;
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.nio.file.*;
 import java.util.stream.*;
 import java.sql.*;
@@ -52,16 +55,16 @@ public class Controller implements Initializable {
     private TextArea inputTxt;
 
     @FXML
-    private TableView<Student> ResultTW=new TableView<>();
+    private TableView<Student> ResultTW = new TableView<>();
 
     @FXML
-    private TableColumn<Student, String> StudentResulTC=new TableColumn<>();
+    private TableColumn<Student, String> StudentResulTC = new TableColumn<>();
 
     @FXML
-    private ChoiceBox<String> projectNameCB=new ChoiceBox<>();
+    private ChoiceBox<String> projectNameCB = new ChoiceBox<>();
 
     @FXML
-    private TableColumn<Student, String> studentIDTC=new TableColumn<>();
+    private TableColumn<Student, String> studentIDTC = new TableColumn<>();
 
     @FXML
     private TextField projectname = new TextField();
@@ -105,251 +108,259 @@ public class Controller implements Initializable {
     @FXML
     private TableView<Configuration> editTab2TW = new TableView<>();
     @FXML
-    private TableView<ProjectDetail> OpenProjectTable= new TableView<>();
+    private TableView<ProjectDetail> OpenProjectTable = new TableView<>();
 
     @FXML
-    private TableColumn<ProjectDetail, String> ExpectedOutputColumn= new TableColumn<>();
+    private TableColumn<ProjectDetail, String> ExpectedOutputColumn = new TableColumn<>();
 
     @FXML
-    private TableColumn<ProjectDetail,String> StudentOutputColumn =new TableColumn<>();
+    private TableColumn<ProjectDetail, String> StudentOutputColumn = new TableColumn<>();
 
     @FXML
-    private TableColumn<ProjectDetail, String> ProjectNameColumn=new TableColumn<>();
+    private TableColumn<ProjectDetail, String> ProjectNameColumn = new TableColumn<>();
     @FXML
-    private TableColumn<ProjectDetail, String> StudentIdColumn=new TableColumn<>();
+    private TableColumn<ProjectDetail, String> StudentIdColumn = new TableColumn<>();
     @FXML
-    private TableColumn<ProjectDetail, String> ConfigNameColumn= new TableColumn<>();
+    private TableColumn<ProjectDetail, String> ConfigNameColumn = new TableColumn<>();
     @FXML
-    private TableColumn<ProjectDetail, String> studentResultCol=new TableColumn<>();
+    private TableColumn<ProjectDetail, String> studentResultCol = new TableColumn<>();
+    @FXML
+    private TextField configNameTxt1 = new TextField();
+    @FXML
+    private TableColumn<Configuration, String> editAttributeName1 = new TableColumn<>();
+
+    @FXML
+    private TableColumn<Configuration, String> editAttributeValue1 = new TableColumn<>();
+    @FXML
+    private TableView<Configuration> editTab2TW1 = new TableView<>();
+    @FXML
+    private Tab exportTab = new Tab();
 
     Configuration configuration = null;
 
     ArrayList<Configuration> configurations = new ArrayList<>();
 
-    private boolean hasError=false;
+
+    private boolean hasError = false;
 
     public void compileAndExecuteWithParameter(List<File> files) throws InterruptedException, IOException {
 
         List<String> erroredFiles = new ArrayList<>();
 
         if (this.configuration != null) {
-                String configurationName = this.configuration.getInput();
-            } else {
-                System.out.println("Configuration is not initialized yet.");
-            }
+            String configurationName = this.configuration.getInput();
+        } else {
+            System.out.println("Configuration is not initialized yet.");
+        }
 
-            for (File file : files) {
-                String studentOutputForError = "";
+        for (File file : files) {
+            String studentOutputForError = "";
 
-                try {
-                    String filePath = file.getAbsolutePath();
+            try {
+                String filePath = file.getAbsolutePath();
 
-                    ProcessBuilder compileProcessBuilder = null;
-                    String inputListFromUser = this.configuration.getInput();
-                    System.out.println("input: " + inputListFromUser);
+                ProcessBuilder compileProcessBuilder = null;
+                String inputListFromUser = this.configuration.getInput();
+                System.out.println("input: " + inputListFromUser);
 
-                    String[] numbers = inputListFromUser.split(" ");
-                    List<String> executionArgs = new ArrayList<>(Arrays.asList(numbers));
+                String[] numbers = inputListFromUser.split(" ");
+                List<String> executionArgs = new ArrayList<>(Arrays.asList(numbers));
 
-                    if (getConfiguration().getLanguage().equals("Java")) {
-                        System.out.println("language name: " + getConfiguration().getLanguage());
-                        compileProcessBuilder = new ProcessBuilder("javac", filePath);
-                        System.out.println("compileProcessBuilder " + "javac" + "" + filePath);
-                    } else if (getConfiguration().getLanguage().equals("C")) {
-                        compileProcessBuilder = new ProcessBuilder("gcc", "-o", "a.out", filePath);
-                    } else if (getConfiguration().getLanguage().equals("Python")) {
-                        // Python
-                        compileProcessBuilder = new ProcessBuilder("python", filePath);
+                if (getConfiguration().getLanguage().equals("Java")) {
+                    System.out.println("language name: " + getConfiguration().getLanguage());
+                    compileProcessBuilder = new ProcessBuilder("javac", filePath);
+                    System.out.println("compileProcessBuilder " + "javac" + "" + filePath);
+                } else if (getConfiguration().getLanguage().equals("C")) {
+                    compileProcessBuilder = new ProcessBuilder("gcc", "-o", "a.out", filePath);
+                } else if (getConfiguration().getLanguage().equals("Python")) {
+                    // Python
+                    compileProcessBuilder = new ProcessBuilder("python", filePath);
 
-                    } else {
-                        System.out.println("Language does not exists.");
-                    }
-
-                    // For Java and C
-                    Process compileProcess = compileProcessBuilder.start();
-                    compileProcess.waitFor();
-
-                    if (compileProcess.exitValue() != 0) {
-                        printProcessErrors(compileProcess);
-                        studentOutputForError = "Compilation failed";
-                        throw new RuntimeException("Compilation failed. Check the error stream for more details.");
-                    }
-
-                    ProcessBuilder executeProcessBuilder = new ProcessBuilder();
-                    Process executeProcess;
-
-                    if (getConfiguration().getLanguage().equals("Java")) {
-
-
-                        String className = extractedClassName;
-                        System.out.println("class name: " + extractedClassName);
-
-                        executeProcessBuilder = new ProcessBuilder("java", className);
-                        System.out.println("executeProcessBuilder: " + " java " + className);
-
-
-                    } else if (getConfiguration().getLanguage().equals("C")) {
-
-                        executeProcessBuilder = new ProcessBuilder("./a.out");
-
-                    } else if (getConfiguration().getLanguage().equals("Python")) {
-                        executeProcessBuilder = new ProcessBuilder("python", filePath);
-
-                    }
-
-                    executeProcessBuilder.directory(new File(filePath).getParentFile());
-                    executeProcessBuilder.command().addAll(executionArgs);
-                    executeProcess = executeProcessBuilder.start();
-
-
-                    // Check if the execution process was successful
-                    if (executeProcess.waitFor() != 0) {
-                        printProcessErrors(executeProcess);
-                        studentOutputForError = "Execution failed";
-                        throw new RuntimeException("Execution failed. Check the error stream for more details.");
-
-                    }
-
-                    else{
-                        //if there is no error
-                       studentOutputForError= printProcessOutput(executeProcess);
-
-                    }
-
-                }
-
-                catch (RuntimeException | IOException e) {
-                    System.err.println("Error compiling/running file: " + file.getAbsolutePath());
-                    e.printStackTrace();
-                    erroredFiles.add(file.getAbsolutePath());
-                    this.hasError = true;
-                }
-
-                if (!erroredFiles.isEmpty()) {
-                    System.out.println("Files that encountered errors during compilation/execution:");
-                    for (String erroredFile : erroredFiles) {
-                        System.out.println(erroredFile);
-                    }
-                }
-
-                if(hasError && studentOutputForError.isEmpty()) {
-                    studentOutputForError = "Error occurred but couldn't specify if during compilation or execution";
-                }
-
-                String filePathid = file.getAbsolutePath();
-                int lastSeparatorIndex = filePathid.lastIndexOf(File.separator);
-                int secondLastSeparatorIndex = filePathid.lastIndexOf(File.separator, lastSeparatorIndex - 1);
-                String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
-
-                System.out.println("student id: " + studentId);
-
-                String projectName = projectname.getText();
-                String studentSourceCodePath = filePathid;
-                String expectedOutput2 = expectedOutputTxt.getText();
-                String configname = configurationBox.getValue();
-                saveProjectDetails(projectName, studentSourceCodePath);
-
-                if(studentOutputForError==null){
-                    studentOutputForError="NULL";
-                }
-
-
-                //save to project table
-
-                try {
-                    Class.forName("org.sqlite.JDBC");
-
-                    connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-
-                    String query = "SELECT COUNT(*) FROM projects WHERE student_id = ? AND project_name = ? AND student_src = ?";
-                    PreparedStatement statement = connection.prepareStatement(query);
-                    statement.setString(1, studentId);
-                    statement.setString(2, projectName);
-                    statement.setString(3, studentSourceCodePath);
-
-                    ResultSet resultSet = statement.executeQuery();
-                    int count = resultSet.getInt(1);
-                    resultSet.close();
-                    statement.close();
-
-                    if (count == 0) {
-                        String insertProjectSQL = "INSERT INTO projects(project_name, student_src, student_output, expected_output, configuration_name, student_id) VALUES (?, ?, ?, ?, ?, ?)";
-                        PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
-                        pstmtProject.setString(1, projectName);
-                        pstmtProject.setString(2, studentSourceCodePath);
-                        pstmtProject.setString(3, studentOutputForError);
-                        pstmtProject.setString(4, expectedOutput2);
-                        pstmtProject.setString(5, configname);
-                        pstmtProject.setString(6, studentId);
-
-                        pstmtProject.executeUpdate();
-                        pstmtProject.close();
-
-                        System.out.println("Record inserted.");
-                    } else {
-                        System.out.println("The combination of student_id, project_name, and student_src already exists.");
-                    }
-
-                    connection.close();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                //save to student table
-
-                String studentResult;
-                String expectedOutput = expectedOutputTxt.getText();
-
-
-                if (studentOutputForError == null) {
-                    studentResult = "NULL";
-                } else if (studentOutputForError.equals(expectedOutput)) {
-                    studentResult = "Success";
-                } else if(hasError){
-                    studentResult = studentOutputForError;  // If an error occurred, set studentResult to the error message
                 } else {
-                    studentResult = "Failure";
+                    System.out.println("Language does not exists.");
                 }
 
+                // For Java and C
+                Process compileProcess = compileProcessBuilder.start();
+                compileProcess.waitFor();
 
-                try {
-                    Class.forName("org.sqlite.JDBC");
+                if (compileProcess.exitValue() != 0) {
+                    printProcessErrors(compileProcess);
+                    studentOutputForError = "Compilation failed";
+                    throw new RuntimeException("Compilation failed. Check the error stream for more details.");
+                }
 
-                    connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+                ProcessBuilder executeProcessBuilder = new ProcessBuilder();
+                Process executeProcess;
 
-                    String query = "SELECT COUNT(*) FROM " + "student" + " WHERE student_id = ? AND project_name = ?";
-                    PreparedStatement statement = connection.prepareStatement(query);
-                    statement.setString(1, studentId);
-                    statement.setString(2, projectName);
+                if (getConfiguration().getLanguage().equals("Java")) {
 
-                    ResultSet resultSet = statement.executeQuery();
-                    int count = resultSet.getInt(1);
-                    resultSet.close();
-                    statement.close();
 
-                    if (count == 0) {
-                        String insertQuery = "INSERT INTO " + "student" + " (student_id, student_result,project_name) VALUES (?, ?, ?)";
-                        PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-                        insertStatement.setString(1, studentId);
-                        insertStatement.setString(2, studentResult);
-                        insertStatement.setString(3, projectName);
+                    String className = extractedClassName;
+                    System.out.println("class name: " + extractedClassName);
 
-                        insertStatement.executeUpdate();
-                        insertStatement.close();
+                    executeProcessBuilder = new ProcessBuilder("java", className);
+                    System.out.println("executeProcessBuilder: " + " java " + className);
 
-                        System.out.println("Record inserted.");
-                    } else {
-                        System.out.println("The combination of student_id and project_name already exists.");
-                    }
-                    connection.close();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+
+                } else if (getConfiguration().getLanguage().equals("C")) {
+
+                    executeProcessBuilder = new ProcessBuilder("./a.out");
+
+                } else if (getConfiguration().getLanguage().equals("Python")) {
+                    executeProcessBuilder = new ProcessBuilder("python", filePath);
+
+                }
+
+                executeProcessBuilder.directory(new File(filePath).getParentFile());
+                executeProcessBuilder.command().addAll(executionArgs);
+                executeProcess = executeProcessBuilder.start();
+
+
+                // Check if the execution process was successful
+                if (executeProcess.waitFor() != 0) {
+                    printProcessErrors(executeProcess);
+                    studentOutputForError = "Execution failed";
+                    throw new RuntimeException("Execution failed. Check the error stream for more details.");
+
+                } else {
+                    //if there is no error
+                    studentOutputForError = printProcessOutput(executeProcess);
+
+                }
+
+            } catch (RuntimeException | IOException e) {
+                System.err.println("Error compiling/running file: " + file.getAbsolutePath());
+                e.printStackTrace();
+                erroredFiles.add(file.getAbsolutePath());
+                this.hasError = true;
+            }
+
+            if (!erroredFiles.isEmpty()) {
+                System.out.println("Files that encountered errors during compilation/execution:");
+                for (String erroredFile : erroredFiles) {
+                    System.out.println(erroredFile);
                 }
             }
-            executedResults();
+
+            if (hasError && studentOutputForError.isEmpty()) {
+                studentOutputForError = "Error occurred but couldn't specify if during compilation or execution";
+            }
+
+            String filePathid = file.getAbsolutePath();
+            int lastSeparatorIndex = filePathid.lastIndexOf(File.separator);
+            int secondLastSeparatorIndex = filePathid.lastIndexOf(File.separator, lastSeparatorIndex - 1);
+            String studentId = filePathid.substring(secondLastSeparatorIndex + 1, lastSeparatorIndex);
+
+            System.out.println("student id: " + studentId);
+
+            String projectName = projectname.getText();
+            String studentSourceCodePath = filePathid;
+            String expectedOutput2 = expectedOutputTxt.getText();
+            String configname = configurationBox.getValue();
+            saveProjectDetails(projectName, studentSourceCodePath);
+
+            if (studentOutputForError == null) {
+                studentOutputForError = "NULL";
+            }
+
+
+            //save to project table
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+
+                connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+                String query = "SELECT COUNT(*) FROM projects WHERE student_id = ? AND project_name = ? AND student_src = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, studentId);
+                statement.setString(2, projectName);
+                statement.setString(3, studentSourceCodePath);
+
+                ResultSet resultSet = statement.executeQuery();
+                int count = resultSet.getInt(1);
+                resultSet.close();
+                statement.close();
+
+                if (count == 0) {
+                    String insertProjectSQL = "INSERT INTO projects(project_name, student_src, student_output, expected_output, configuration_name, student_id) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pstmtProject = connection.prepareStatement(insertProjectSQL);
+                    pstmtProject.setString(1, projectName);
+                    pstmtProject.setString(2, studentSourceCodePath);
+                    pstmtProject.setString(3, studentOutputForError);
+                    pstmtProject.setString(4, expectedOutput2);
+                    pstmtProject.setString(5, configname);
+                    pstmtProject.setString(6, studentId);
+
+                    pstmtProject.executeUpdate();
+                    pstmtProject.close();
+
+                    System.out.println("Record inserted.");
+                } else {
+                    System.out.println("The combination of student_id, project_name, and student_src already exists.");
+                }
+
+                connection.close();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            //save to student table
+
+            String studentResult;
+            String expectedOutput = expectedOutputTxt.getText();
+
+
+            if (studentOutputForError == null) {
+                studentResult = "NULL";
+            } else if (studentOutputForError.equals(expectedOutput)) {
+                studentResult = "Success";
+            } else if (hasError) {
+                studentResult = studentOutputForError;  // If an error occurred, set studentResult to the error message
+            } else {
+                studentResult = "Failure";
+            }
+
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+
+                connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+                String query = "SELECT COUNT(*) FROM " + "student" + " WHERE student_id = ? AND project_name = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, studentId);
+                statement.setString(2, projectName);
+
+                ResultSet resultSet = statement.executeQuery();
+                int count = resultSet.getInt(1);
+                resultSet.close();
+                statement.close();
+
+                if (count == 0) {
+                    String insertQuery = "INSERT INTO " + "student" + " (student_id, student_result,project_name) VALUES (?, ?, ?)";
+                    PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+                    insertStatement.setString(1, studentId);
+                    insertStatement.setString(2, studentResult);
+                    insertStatement.setString(3, projectName);
+
+                    insertStatement.executeUpdate();
+                    insertStatement.close();
+
+                    System.out.println("Record inserted.");
+                } else {
+                    System.out.println("The combination of student_id and project_name already exists.");
+                }
+                connection.close();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        executedResults();
 
     }
 
@@ -542,18 +553,17 @@ public class Controller implements Initializable {
 
     }
 
-    public void executeAll() throws IOException {
-        
-        
+    public void executeAll(ActionEvent d) throws IOException {
+
+
         String project_name = projectname.getText();
-        if (project_name == null || project_name.trim().isEmpty()||configurationBox.getValue()==null) {
+        if (project_name == null || project_name.trim().isEmpty() || configurationBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning Dialog");
             alert.setHeaderText("Input Error");
             alert.setContentText("Please enter a project and config name to continue.");
             alert.showAndWait();
-        }
-        else {
+        } else {
             List<File> selectedFiles = chooseFile();
             executeFiles(selectedFiles);
         }
@@ -561,6 +571,14 @@ public class Controller implements Initializable {
         configurationBox.getSelectionModel().clearSelection();
         projectname.clear();
         expectedOutputTxt.clear();
+
+        root = FXMLLoader.load(getClass().getResource("OpenProject.fxml"));
+        stage = (Stage) ((Node) d.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+
     }
 
     private String printProcessOutput(Process process) throws IOException {
@@ -577,11 +595,11 @@ public class Controller implements Initializable {
                 }
                 output.append(line.trim());
             }
-             finalOutput = output.toString().trim();
+            finalOutput = output.toString().trim();
             System.out.println(finalOutput);
 
         }
-        return finalOutput ;
+        return finalOutput;
     }
 
     private static void printProcessErrors(Process process) throws IOException {
@@ -602,6 +620,7 @@ public class Controller implements Initializable {
         stage.show();
         stage.setResizable(true);
     }
+
     private Connection connection;
 
     private static boolean isSetupDone = false;
@@ -648,6 +667,7 @@ public class Controller implements Initializable {
             }
         }
     }
+
     public void loadProjectNames() {
         String sql = "SELECT DISTINCT project_name FROM projects";
 
@@ -668,7 +688,9 @@ public class Controller implements Initializable {
             System.out.println(e.getMessage());
         }
     }
+
     private ObservableList<ProjectDetail> projectDetails = FXCollections.observableArrayList();
+
     public void loadProjectDetails(String projectName) {
 
         projectDetails.clear();
@@ -684,7 +706,7 @@ public class Controller implements Initializable {
 
             while (rs.next()) {
                 projectDetails.add(new ProjectDetail(projectName, rs.getString("student_id"), rs.getString("configuration_name"), rs.getString("student_output")
-                        , rs.getString("expected_output"),rs.getString("student_result")));
+                        , rs.getString("expected_output"), rs.getString("student_result")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -692,254 +714,12 @@ public class Controller implements Initializable {
         OpenProjectTable.setItems(projectDetails);
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        createTable();
-        languageBox.getItems().addAll("Java", "C", "Python");
-        loadConfigurationNames();
-        columnNameTextField.getItems().addAll("configuration_name", "given_input");
-
-        loadConfigurationNames();
-        createTable();
-        ListConfig();
-        ListStudentResults();
-        loadProjectNames();
-
-        ProjectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
-        StudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
-        ConfigNameColumn.setCellValueFactory(new PropertyValueFactory<>("configName"));
-        StudentOutputColumn.setCellValueFactory(new PropertyValueFactory<>("studentOutput"));
-        ExpectedOutputColumn.setCellValueFactory(new PropertyValueFactory<>("expectedOutput"));
-        studentResultCol.setCellValueFactory(new PropertyValueFactory<>("studentResult"));
-
-
-        projectNameCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                loadProjectDetails(newValue);
-            }
-        });
-
-        // projectNameCB
-
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-
-            String url = "jdbc:sqlite:database.db";
-            Connection connection = DriverManager.getConnection(url);
-
-            String query = "SELECT DISTINCT project_name FROM student";
-            PreparedStatement statement = connection.prepareStatement(query);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            ObservableList<String> projectNames = FXCollections.observableArrayList();
-
-
-            studentIDTC.setCellValueFactory(new PropertyValueFactory<>("student_id"));
-
-            StudentResulTC.setCellValueFactory(new PropertyValueFactory<>("student_result"));
-
-            ObservableList<Student> students = FXCollections.observableArrayList();
-            ResultTW.setItems(students);
-
-            while (resultSet.next()) {
-                String projectName = resultSet.getString("project_name");
-                projectNames.add(projectName);
-            }
-
-            resultSet.close();
-            statement.close();
-
-            projectNameCB.setItems(projectNames);
-
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void switchToResults(ActionEvent a) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("ListStudentResults.fxml"));
-        stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(true);
-    }
-
-
-    public File unzipFile(File file) throws IOException {
-        // Create a temporary directory for unzipping the contents
-        Path tempDir = Files.createTempDirectory("unzippedFiles");
-
-        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(file))) {
-            ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
-                File outputFile = tempDir.resolve(entry.getName()).toFile();
-                try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, length);
-                    }
-                }
-            }
-        }
-
-        // Select the Main.java file from the unzipped files
-        File mainFile = tempDir.resolve("Main.java").toFile();
-        if (mainFile.exists()) {
-            return mainFile;
-        } else {
-            throw new FileNotFoundException("Main.java not found in the unzipped files.");
-        }
-    }
-
-    public void createConfiguration() {
-        if (configName.getText().isEmpty() || languageBox.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Input Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please enter a configuration name and select a language.");
-            alert.showAndWait();
-        } else {
-            setCommands(languageBox.getValue(), extractedClassName, configName.getText());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Configuration created successfully.");
-            alert.showAndWait();
-        }
-        configName.clear();
-        inputTxt.clear();
-    }
-
-    private String extractClassName(File file) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            Pattern pattern = Pattern.compile("class\\s+(\\w+)");
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    return matcher.group(1);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
-        }
-        return null;
-    }
-
-
-    public void openFileChooserAndReadFile() {
-        List<Integer> numbers = new ArrayList<>();
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().toLowerCase().endsWith(".txt");
-            }
-
-            @Override
-            public String getDescription() {
-                return "Text Files (*.txt)";
-            }
-        });
-
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
-                String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
-                numbers = Arrays.stream(content.split("\\s+"))
-                        .filter(s -> !s.isEmpty())
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
-
-                // Set the value of inputTxt using the content of the file
-                inputTxt.setText(content);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    public void openFileChooserAndReadFiles() {
-        List<Integer> numbers = new ArrayList<>();
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().toLowerCase().endsWith(".txt");
-            }
-
-            @Override
-            public String getDescription() {
-                return "Text Files (*.txt)";
-            }
-        });
-
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
-                String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
-                numbers = Arrays.stream(content.split("\\s+"))
-                        .filter(s -> !s.isEmpty())
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
-
-                // Set the value of inputTxt using the content of the file
-                expectedOutputTxt.setText(content);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-
-    @FXML
-    public void switchToConfig(ActionEvent e) throws IOException {
-
-        root = FXMLLoader.load(getClass().getResource("Configuration.fxml"));
-        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(true);
-    }
-
-    @FXML
-    public void switchToNewProject(ActionEvent e) throws IOException {
-
-        root = FXMLLoader.load(getClass().getResource("NewProject.fxml"));
-        stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(true);
-    }
-
-    public void switchToEditConfig(ActionEvent a) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("editPage.fxml"));
-        stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(true);
-    }
-
-    public void goToEditConfig() {
+    //Req2 import and export
+    public void goToExportConfig() {
 
         String url = "jdbc:sqlite:database.db";
 
-        if (configNameTxt.getText().isEmpty()) {
+        if (configNameTxt1.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Input Error");
             alert.setHeaderText(null);
@@ -963,15 +743,15 @@ public class Controller implements Initializable {
 
             ObservableList<Configuration> list2 = FXCollections.observableArrayList(new Configuration("", ""));
 
-            editAttributeName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("X"));
-            editAttributeValue.setCellValueFactory(new PropertyValueFactory<Configuration, String>("Y"));
-            editTab2TW.setItems(list2);
+            editAttributeName1.setCellValueFactory(new PropertyValueFactory<Configuration, String>("X"));
+            editAttributeValue1.setCellValueFactory(new PropertyValueFactory<Configuration, String>("Y"));
+            editTab2TW1.setItems(list2);
 
 
             List<String> columnValues = new ArrayList<>();
 
 
-            String configName = configNameTxt.getText();
+            String configName = configNameTxt1.getText();
             String sql2 = "SELECT * FROM configuration WHERE configuration_name = '" + configName + "'";
 
 
@@ -991,7 +771,7 @@ public class Controller implements Initializable {
 
                     Configuration temp2 = new Configuration(columnName, columnValue);
 
-                    editTab2TW.getItems().add(temp2);
+                    editTab2TW1.getItems().add(temp2);
 
 
                 }
@@ -1003,265 +783,681 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
 
-        TabPane.getSelectionModel().select(EditTab);
+
+        TabPane.getSelectionModel().select(exportTab);
 
     }
 
-
-    public void ListStudentResults() {
-
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-
-
-            String url = "jdbc:sqlite:database.db";
-            Connection connection = DriverManager.getConnection(url);
-
-
-            String projectName =projectNameCB.getValue();
-
-            String query = "SELECT student_id, student_result FROM student WHERE project_name = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, projectName);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            ObservableList<Student> data = FXCollections.observableArrayList();
-
-            while (resultSet.next()) {
-                String studentId = resultSet.getString("student_id");
-                String studentResult = resultSet.getString("student_result");
-
-                data.add(new Student(studentId, studentResult));
-            }
-
-            resultSet.close();
-            statement.close();
-
-            ResultTW.setItems(data);
-
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void executedResults(){
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-
-
-            String url = "jdbc:sqlite:database.db";
-            Connection connection = DriverManager.getConnection(url);
-
-
-            String projectName =projectname.getText();
-
-            String query = "SELECT student_id, student_result FROM student WHERE project_name = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, projectName);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            ObservableList<Student> data = FXCollections.observableArrayList();
-
-            while (resultSet.next()) {
-                String studentId = resultSet.getString("student_id");
-                String studentResult = resultSet.getString("student_result");
-
-                data.add(new Student(studentId, studentResult));
-            }
-
-            resultSet.close();
-            statement.close();
-
-            ResultTW.setItems(data);
-
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void editMethod(ActionEvent b) throws IOException {
-
-
-        String url = "jdbc:sqlite:database.db";
-        if (columnNameTextField.getValue().isEmpty() || columnNameTextField1.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Input Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please enter both a attribute name and a new attribute value name.");
-            alert.showAndWait();
-            return;
-        }
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            Connection connection = DriverManager.getConnection(url);
-            String columnName = columnNameTextField.getValue();
-            String configName = columnNameTextField1.getText();
-
-            String updateSQL = "UPDATE configuration SET " + columnName + " = ? WHERE configuration_name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
-
-            preparedStatement.setString(1, configName);
-            preparedStatement.setString(2, configNameTxt.getText());
-
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                // Database update successful
-
-                // Refresh the TableView with updated data
-                ListConfig();
-
-
-                columnNameTextField1.clear();
-
-                root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
-                stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            } else {
-                System.out.println("Update failed. No rows affected.");
-            }
-
-            preparedStatement.close();
-            connection.close();
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteMethod(ActionEvent b) throws IOException {
-        String url = "jdbc:sqlite:database.db";
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            Connection connection = DriverManager.getConnection(url);
-
-            String deleteSQL = "DELETE FROM configuration WHERE configuration_name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
-            preparedStatement.setString(1, configNameTxt.getText());
-
-            int rowsDeleted = preparedStatement.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                System.out.println("Row deleted successfully.");
-            } else {
-                System.out.println("No rows deleted. Check the config name.");
-            }
-
-            preparedStatement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
-        stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    //edit first tab table view
-    public void ListConfig() {
-        String url6 = "jdbc:sqlite:database.db";
-        try {
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url6);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM configuration");
-
-            editConfigName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("configName"));
-            editConfigLang.setCellValueFactory(new PropertyValueFactory<Configuration, String>("language"));
-            editGivenInput.setCellValueFactory(new PropertyValueFactory<Configuration, String>("input"));
-
-
-            List<Configuration> data2 = new ArrayList<>();
-
-            while (rs.next()) {
-
-
-                String value1 = rs.getString("configuration_name");
-                String value2 = rs.getString("configuration_language");
-                String value3 = rs.getString("given_input");
-
-
-                data2.add(new Configuration(value1, value2, value3));
-
-            }
-            ObservableList<Configuration> ListPageData = FXCollections.observableArrayList(data2);
-            editPageTW.setItems(ListPageData);
-
-
-            conn.close();
-        } catch (SQLException | ClassNotFoundException a) {
-            a.printStackTrace();
-        }
-    }
-
-    public void switchToWelcome(ActionEvent a) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
-        stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        stage.setResizable(true);
-    }
-    public static List<File> unzipAll(File directory) throws IOException {
-        List<File> extractedFiles = new ArrayList<>();
-
-
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Provided path is not a directory: " + directory);
-        }
-
-        File[] files = directory.listFiles();
-        for (File file : files) {
-            if (file.isFile() && file.getName().endsWith(".zip")) {
-                extractedFiles.addAll(unzip(file.getAbsolutePath()));
-            }
-        }
-
-        return extractedFiles;
-    }
-
-    public static List<File> unzip(String zipFilePath) throws IOException {
-        List<File> extractedFiles = new ArrayList<>();
-        Path zipFile = Paths.get(zipFilePath);
-        String destDir = zipFile.getParent().toString();
-        String zipFileName = zipFile.getFileName().toString();
-
-        try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(zipFile))) {
-            ZipEntry entry = zipIn.getNextEntry();
-            while (entry != null) {
-                String filePath = destDir + File.separator + zipFileName.replace(".zip", "") + File.separator + entry.getName();
-                if (!entry.isDirectory()) {
-                    extractedFiles.add(extractFile(zipIn, filePath));
-                } else {
-                    File dir = new File(filePath);
-                    dir.mkdir();
+    public void exportConfig() throws IOException {
+
+        FileChooser fileChooser = new FileChooser();
+        MouseEvent mouseEvent = null;
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                for (int i = 1; i < editTab2TW1.getItems().size(); i++) {
+                    String attrName = editTab2TW1.getItems().get(i).getX();
+                    String attrValue = editTab2TW1.getItems().get(i).getY();
+                    writer.write(attrName + ": " + attrValue);
+                    writer.newLine();
                 }
-                zipIn.closeEntry();
-                entry = zipIn.getNextEntry();
+                System.out.println("Configurations exported successfully!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Export Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Configurations exported successfully!");
+                alert.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error exporting configurations: " + e.getMessage());
             }
         }
 
-        return extractedFiles;
     }
 
-    private static File extractFile(ZipInputStream zipIn, String filePath) throws IOException {
-        File file = new File(filePath);
-        file.getParentFile().mkdirs();
-        Files.copy(zipIn, file.toPath());
-        return file;
+    public void importConfigurations() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
+
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                String configurationLanguage = null;
+                String configurationName = null;
+                String givenInput = null;
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.trim().isEmpty()) {
+                        continue; // Skip empty line
+                    }
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        String key = parts[0].trim();
+                        String value = parts[1].trim();
+
+                        if (key.equalsIgnoreCase("configuration_language")) {
+                            configurationLanguage = value;
+                        } else if (key.equalsIgnoreCase("configuration_name")) {
+                            configurationName = value;
+                        } else if (key.equalsIgnoreCase("given_input")) {
+                            givenInput = value;
+                        }
+                    } else {
+                        // Handle the case when the line does not have key-value pairs
+                        System.out.println("Invalid line: " + line);
+                    }
+                }
+
+                // Insert the configuration into the database if all values are present
+                if (configurationLanguage != null && configurationName != null && givenInput != null) {
+                    insertConfiguration(configurationLanguage, configurationName, givenInput);
+                    System.out.println("Configurations imported successfully!");
+                } else {
+                    System.out.println("Incomplete configuration data.");
+                }
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Export Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Configurations imported successfully!");
+                alert.showAndWait();
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error importing configurations: " + e.getMessage());
+            }
+        } else {
+            // No file selected, handle the cancel operation or show an error message
+            System.out.println("No file selected.");
+        }
     }
-}
+
+    public void insertConfiguration(String language, String configName, String input) throws SQLException {
+
+        String url = "jdbc:sqlite:database.db";
+        String insertSql = "INSERT INTO configuration (configuration_language, configuration_name, given_input) VALUES (?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url);
+             PreparedStatement statement = connection.prepareStatement(insertSql)) {
+
+            statement.setString(1, language);
+            statement.setString(2, configName);
+            statement.setString(3, input);
+            statement.executeUpdate();
+
+        }
+    }
+        @Override
+        public void initialize (URL location, ResourceBundle resources){
+
+            createTable();
+            languageBox.getItems().addAll("Java", "C", "Python");
+            loadConfigurationNames();
+            columnNameTextField.getItems().addAll("configuration_name", "given_input");
+
+            loadConfigurationNames();
+            createTable();
+            ListConfig();
+            ListStudentResults();
+            loadProjectNames();
+
+            ProjectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
+            StudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
+            ConfigNameColumn.setCellValueFactory(new PropertyValueFactory<>("configName"));
+            StudentOutputColumn.setCellValueFactory(new PropertyValueFactory<>("studentOutput"));
+            ExpectedOutputColumn.setCellValueFactory(new PropertyValueFactory<>("expectedOutput"));
+            studentResultCol.setCellValueFactory(new PropertyValueFactory<>("studentResult"));
+
+
+            projectNameCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    loadProjectDetails(newValue);
+                }
+            });
+
+            // projectNameCB
+
+            try {
+
+                Class.forName("org.sqlite.JDBC");
+
+                String url = "jdbc:sqlite:database.db";
+                Connection connection = DriverManager.getConnection(url);
+
+                String query = "SELECT DISTINCT project_name FROM student";
+                PreparedStatement statement = connection.prepareStatement(query);
+
+                ResultSet resultSet = statement.executeQuery();
+
+                ObservableList<String> projectNames = FXCollections.observableArrayList();
+
+
+                studentIDTC.setCellValueFactory(new PropertyValueFactory<>("student_id"));
+
+                StudentResulTC.setCellValueFactory(new PropertyValueFactory<>("student_result"));
+
+                ObservableList<Student> students = FXCollections.observableArrayList();
+                ResultTW.setItems(students);
+
+                while (resultSet.next()) {
+                    String projectName = resultSet.getString("project_name");
+                    projectNames.add(projectName);
+                }
+
+                resultSet.close();
+                statement.close();
+
+                projectNameCB.setItems(projectNames);
+
+                connection.close();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        public void switchToResults (ActionEvent a) throws IOException {
+            root = FXMLLoader.load(getClass().getResource("ListStudentResults.fxml"));
+            stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(true);
+        }
+
+
+        public File unzipFile (File file) throws IOException {
+            // Create a temporary directory for unzipping the contents
+            Path tempDir = Files.createTempDirectory("unzippedFiles");
+
+            try (ZipInputStream zis = new ZipInputStream(new FileInputStream(file))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    File outputFile = tempDir.resolve(entry.getName()).toFile();
+                    try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, length);
+                        }
+                    }
+                }
+            }
+
+            // Select the Main.java file from the unzipped files
+            File mainFile = tempDir.resolve("Main.java").toFile();
+            if (mainFile.exists()) {
+                return mainFile;
+            } else {
+                throw new FileNotFoundException("Main.java not found in the unzipped files.");
+            }
+        }
+
+        public void createConfiguration () {
+            if (configName.getText().isEmpty() || languageBox.getValue() == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Input Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a configuration name and select a language.");
+                alert.showAndWait();
+            } else {
+                setCommands(languageBox.getValue(), extractedClassName, configName.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText(null);
+                alert.setContentText("Configuration created successfully.");
+                alert.showAndWait();
+            }
+            configName.clear();
+            inputTxt.clear();
+        }
+
+        private String extractClassName (File file){
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                Pattern pattern = Pattern.compile("class\\s+(\\w+)");
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    Matcher matcher = pattern.matcher(line);
+                    if (matcher.find()) {
+                        return matcher.group(1);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error reading file: " + e.getMessage());
+            }
+            return null;
+        }
+
+
+        public void openFileChooserAndReadFile () {
+            List<Integer> numbers = new ArrayList<>();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return file.getName().toLowerCase().endsWith(".txt");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Text Files (*.txt)";
+                }
+            });
+
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
+                    numbers = Arrays.stream(content.split("\\s+"))
+                            .filter(s -> !s.isEmpty())
+                            .map(Integer::parseInt)
+                            .collect(Collectors.toList());
+
+                    // Set the value of inputTxt using the content of the file
+                    inputTxt.setText(content);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        public void openFileChooserAndReadFiles () {
+            List<Integer> numbers = new ArrayList<>();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return file.getName().toLowerCase().endsWith(".txt");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Text Files (*.txt)";
+                }
+            });
+
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
+                    numbers = Arrays.stream(content.split("\\s+"))
+                            .filter(s -> !s.isEmpty())
+                            .map(Integer::parseInt)
+                            .collect(Collectors.toList());
+
+                    // Set the value of inputTxt using the content of the file
+                    expectedOutputTxt.setText(content);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+
+        @FXML
+        public void switchToConfig (ActionEvent e) throws IOException {
+
+            root = FXMLLoader.load(getClass().getResource("Configuration.fxml"));
+            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(true);
+        }
+
+        @FXML
+        public void switchToNewProject (ActionEvent e) throws IOException {
+
+            root = FXMLLoader.load(getClass().getResource("NewProject.fxml"));
+            stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(true);
+        }
+
+        public void switchToEditConfig (ActionEvent a) throws IOException {
+            root = FXMLLoader.load(getClass().getResource("editPage.fxml"));
+            stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(true);
+        }
+
+        public void goToEditConfig () {
+
+            String url = "jdbc:sqlite:database.db";
+
+            if (configNameTxt.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Input Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a configuration name to edit.");
+                alert.showAndWait();
+                return;
+            }
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+
+                Connection connection = DriverManager.getConnection(url);
+                ObservableList<Configuration> data3 = FXCollections.observableArrayList();
+                Statement stmt = connection.createStatement();
+                String sql = "SELECT * FROM configuration";
+                ResultSet rs = stmt.executeQuery(sql);
+                ResultSetMetaData metaData = rs.getMetaData();
+                int numColumns = metaData.getColumnCount();
+
+                ArrayList<String> allColumnNames = new ArrayList<>();
+
+                ObservableList<Configuration> list2 = FXCollections.observableArrayList(new Configuration("", ""));
+
+                editAttributeName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("X"));
+                editAttributeValue.setCellValueFactory(new PropertyValueFactory<Configuration, String>("Y"));
+                editTab2TW.setItems(list2);
+
+
+                List<String> columnValues = new ArrayList<>();
+
+
+                String configName = configNameTxt.getText();
+                String sql2 = "SELECT * FROM configuration WHERE configuration_name = '" + configName + "'";
+
+
+                ResultSet rs2 = stmt.executeQuery(sql2);
+
+                while (rs2.next()) {
+
+                    for (int i = 1; i <= numColumns; i++) {
+
+
+                        String columnName = metaData.getColumnName(i);
+                        allColumnNames.add(columnName);
+
+                        String columnValue = rs2.getString(i);
+                        columnValues.add(columnValue);
+
+
+                        Configuration temp2 = new Configuration(columnName, columnValue);
+
+                        editTab2TW.getItems().add(temp2);
+
+
+                    }
+                }
+                rs.close();
+                stmt.close();
+                connection.close();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            TabPane.getSelectionModel().select(EditTab);
+
+        }
+
+
+        public void ListStudentResults () {
+
+            try {
+
+                Class.forName("org.sqlite.JDBC");
+
+
+                String url = "jdbc:sqlite:database.db";
+                Connection connection = DriverManager.getConnection(url);
+
+
+                String projectName = projectNameCB.getValue();
+
+                String query = "SELECT student_id, student_result FROM student WHERE project_name = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, projectName);
+
+                ResultSet resultSet = statement.executeQuery();
+
+                ObservableList<Student> data = FXCollections.observableArrayList();
+
+                while (resultSet.next()) {
+                    String studentId = resultSet.getString("student_id");
+                    String studentResult = resultSet.getString("student_result");
+
+                    data.add(new Student(studentId, studentResult));
+                }
+
+                resultSet.close();
+                statement.close();
+
+                ResultTW.setItems(data);
+
+                connection.close();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        public void executedResults () {
+            try {
+
+                Class.forName("org.sqlite.JDBC");
+
+
+                String url = "jdbc:sqlite:database.db";
+                Connection connection = DriverManager.getConnection(url);
+
+
+                String projectName = projectname.getText();
+
+                String query = "SELECT student_id, student_result FROM student WHERE project_name = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, projectName);
+
+                ResultSet resultSet = statement.executeQuery();
+
+                ObservableList<Student> data = FXCollections.observableArrayList();
+
+                while (resultSet.next()) {
+                    String studentId = resultSet.getString("student_id");
+                    String studentResult = resultSet.getString("student_result");
+
+                    data.add(new Student(studentId, studentResult));
+                }
+
+                resultSet.close();
+                statement.close();
+
+                ResultTW.setItems(data);
+
+                connection.close();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        public void editMethod (ActionEvent b) throws IOException {
+
+
+            String url = "jdbc:sqlite:database.db";
+            if (columnNameTextField.getValue().isEmpty() || columnNameTextField1.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Input Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter both a attribute name and a new attribute value name.");
+                alert.showAndWait();
+                return;
+            }
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection connection = DriverManager.getConnection(url);
+                String columnName = columnNameTextField.getValue();
+                String configName = columnNameTextField1.getText();
+
+                String updateSQL = "UPDATE configuration SET " + columnName + " = ? WHERE configuration_name = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
+
+                preparedStatement.setString(1, configName);
+                preparedStatement.setString(2, configNameTxt.getText());
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    // Database update successful
+
+                    // Refresh the TableView with updated data
+                    ListConfig();
+
+
+                    columnNameTextField1.clear();
+
+                    root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
+                    stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    System.out.println("Update failed. No rows affected.");
+                }
+
+                preparedStatement.close();
+                connection.close();
+
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void deleteMethod (ActionEvent b) throws IOException {
+            String url = "jdbc:sqlite:database.db";
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection connection = DriverManager.getConnection(url);
+
+                String deleteSQL = "DELETE FROM configuration WHERE configuration_name = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+                preparedStatement.setString(1, configNameTxt.getText());
+
+                int rowsDeleted = preparedStatement.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    System.out.println("Row deleted successfully.");
+                } else {
+                    System.out.println("No rows deleted. Check the config name.");
+                }
+
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
+            stage = (Stage) ((Node) b.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+
+        //edit first tab table view
+        public void ListConfig () {
+            String url6 = "jdbc:sqlite:database.db";
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conn = DriverManager.getConnection(url6);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM configuration");
+
+                editConfigName.setCellValueFactory(new PropertyValueFactory<Configuration, String>("configName"));
+                editConfigLang.setCellValueFactory(new PropertyValueFactory<Configuration, String>("language"));
+                editGivenInput.setCellValueFactory(new PropertyValueFactory<Configuration, String>("input"));
+
+
+                List<Configuration> data2 = new ArrayList<>();
+
+                while (rs.next()) {
+
+
+                    String value1 = rs.getString("configuration_name");
+                    String value2 = rs.getString("configuration_language");
+                    String value3 = rs.getString("given_input");
+
+
+                    data2.add(new Configuration(value1, value2, value3));
+
+                }
+                ObservableList<Configuration> ListPageData = FXCollections.observableArrayList(data2);
+                editPageTW.setItems(ListPageData);
+
+
+                conn.close();
+            } catch (SQLException | ClassNotFoundException a) {
+                a.printStackTrace();
+            }
+        }
+
+        public void switchToWelcome (ActionEvent a) throws IOException {
+            root = FXMLLoader.load(getClass().getResource("WelcomePage.fxml"));
+            stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setResizable(true);
+        }
+        public static List<File> unzipAll (File directory) throws IOException {
+            List<File> extractedFiles = new ArrayList<>();
+
+
+            if (!directory.isDirectory()) {
+                throw new IllegalArgumentException("Provided path is not a directory: " + directory);
+            }
+
+            File[] files = directory.listFiles();
+            for (File file : files) {
+                if (file.isFile() && file.getName().endsWith(".zip")) {
+                    extractedFiles.addAll(unzip(file.getAbsolutePath()));
+                }
+            }
+
+            return extractedFiles;
+        }
+
+        public static List<File> unzip (String zipFilePath) throws IOException {
+            List<File> extractedFiles = new ArrayList<>();
+            Path zipFile = Paths.get(zipFilePath);
+            String destDir = zipFile.getParent().toString();
+            String zipFileName = zipFile.getFileName().toString();
+
+            try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(zipFile))) {
+                ZipEntry entry = zipIn.getNextEntry();
+                while (entry != null) {
+                    String filePath = destDir + File.separator + zipFileName.replace(".zip", "") + File.separator + entry.getName();
+                    if (!entry.isDirectory()) {
+                        extractedFiles.add(extractFile(zipIn, filePath));
+                    } else {
+                        File dir = new File(filePath);
+                        dir.mkdir();
+                    }
+                    zipIn.closeEntry();
+                    entry = zipIn.getNextEntry();
+                }
+            }
+
+            return extractedFiles;
+        }
+
+        private static File extractFile (ZipInputStream zipIn, String filePath) throws IOException {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            Files.copy(zipIn, file.toPath());
+            return file;
+        }
+    }

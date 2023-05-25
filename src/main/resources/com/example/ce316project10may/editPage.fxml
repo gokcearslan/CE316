@@ -31,11 +31,11 @@
                                         </TableView>
                                     </children>
                                 </VBox>
-                                <VBox layoutX="381.0" prefHeight="183.0" prefWidth="241.0">
+                                <VBox layoutX="381.0" prefHeight="118.0" prefWidth="241.0">
                                     <children>
                                         <Label prefHeight="67.0" prefWidth="197.0" text="enter the configuration name to edit">
                                             <VBox.margin>
-                                                <Insets left="40.0" top="50.0" />
+                                                <Insets left="40.0" top="10.0" />
                                             </VBox.margin>
                                         </Label>
                                         <TextField fx:id="configNameTxt" prefHeight="26.0" prefWidth="185.0">
@@ -50,11 +50,11 @@
                                         </Button>
                                     </children>
                                 </VBox>
-                                <VBox layoutX="381.0" layoutY="193.0" prefHeight="175.0" prefWidth="243.0">
+                                <VBox layoutX="381.0" layoutY="249.0" prefHeight="119.0" prefWidth="243.0">
                                     <children>
-                                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Create New Configuration">
+                                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="0.0" prefWidth="157.0" text="Create New Configuration">
                                             <VBox.margin>
-                                                <Insets left="70.0" top="70.0" />
+                                                <Insets left="70.0" />
                                             </VBox.margin>
                                         </Button>
                                         <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Go Project Creation Page">
@@ -69,6 +69,25 @@
                                         </Button>
                                     </children>
                                 </VBox>
+                        <VBox layoutX="382.0" layoutY="118.0" prefHeight="118.0" prefWidth="241.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="241.0" text="enter the configuration name to export">
+                                 <VBox.margin>
+                                    <Insets left="20.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="configNameTxt1" prefHeight="26.0" prefWidth="185.0">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Button mnemonicParsing="false" onAction="#goToExportConfig" text="Export">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" left="190.0" top="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
                             </children>
                         </AnchorPane>
                     </content>
@@ -144,6 +163,25 @@
                         </AnchorPane>
                     </content>
                 </Tab>
+            <Tab fx:id="exportTab" text="Export Configuration">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="355.0" prefWidth="610.0">
+                           <children>
+                              <TableView fx:id="editTab2TW1" layoutX="149.0" prefHeight="371.0" prefWidth="312.0">
+                                 <columns>
+                                    <TableColumn fx:id="editAttributeName1" prefWidth="152.00002539157867" text="attribute name" />
+                                    <TableColumn fx:id="editAttributeValue1" prefWidth="156.6666717529297" text="attribute value" />
+                                 </columns>
+                              </TableView>
+                              <Button layoutX="478.0" layoutY="310.0" mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
             </tabs>
         </TabPane>
     </children>
