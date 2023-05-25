@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+   <children>
+      <ChoiceBox fx:id="projectNameCB" layoutX="390.0" layoutY="55.0" prefHeight="30.0" prefWidth="162.0" />
+      <TableView fx:id="ResultTW" prefHeight="411.0" prefWidth="358.0">
+        <columns>
+          <TableColumn fx:id="studentIDTC" prefWidth="178.39996337890625" text="Student ID" />
+          <TableColumn fx:id="StudentResulTC" prefWidth="180.00006103515625" text="Student Result" />
+        </columns>
+      </TableView>
+      <Button layoutX="478.0" layoutY="99.0" mnemonicParsing="false" onAction="#ListStudentResults" text="List Results" />
+      <Label layoutX="385.0" layoutY="22.0" text="Choose project name to see results" />
+      <Button layoutX="501.0" layoutY="155.0" mnemonicParsing="false" onAction="#switchToWelcome" text="Go to Welcome" />
+   </children>
+</AnchorPane>
