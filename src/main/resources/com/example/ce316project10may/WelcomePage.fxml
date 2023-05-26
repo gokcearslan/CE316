@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="402.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="402.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <HBox prefHeight="81.0" prefWidth="600.0">
          <children>
@@ -20,18 +20,20 @@
       </HBox>
       <HBox layoutX="-1.0" layoutY="72.0" prefHeight="157.0" prefWidth="600.0" AnchorPane.bottomAnchor="171.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="72.0">
          <children>
-            <ButtonBar prefHeight="159.0" prefWidth="630.0">
+            <ButtonBar prefHeight="175.0" prefWidth="710.0">
                <buttons>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="127.0" text="Create Configuration">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToConfig" text="İmport Configuration" />
                   <Button mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="25.0" text="Edit Configuration">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToEditConfig" text="Export Configuration" />
                   <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" text="New Project" textAlignment="CENTER">
                      <font>
                         <Font size="10.0" />

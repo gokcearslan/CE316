@@ -49,11 +49,6 @@
                         <Insets left="200.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#importConfigurations" text="Import Configuration">
-                     <VBox.margin>
-                        <Insets left="200.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
                   <Button mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="25.0" prefWidth="147.0" text="Go to Edit Page">
                      <VBox.margin>
                         <Insets left="340.0" top="20.0" />
@@ -110,6 +105,21 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TextArea>
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" onAction="#importConfigurations" text="Import Configuration" />
+      <HBox centerShape="false" layoutX="10.0" layoutY="10.0" prefHeight="181.0" prefWidth="600.0">
+         <children>
+            <Label prefHeight="25.0" prefWidth="107.0" text="Choose Language: ">
+               <HBox.margin>
+                  <Insets left="190.0" top="50.0" />
+               </HBox.margin>
+            </Label>
+            <ChoiceBox fx:id="languageBox1" centerShape="false" prefHeight="25.0" prefWidth="139.0">
+               <HBox.margin>
+                  <Insets top="50.0" />
+               </HBox.margin>
+            </ChoiceBox>
          </children>
       </HBox>
    </children>
