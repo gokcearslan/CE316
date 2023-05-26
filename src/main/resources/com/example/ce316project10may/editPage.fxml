@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
     <children>
         <TabPane fx:id="TabPane" prefHeight="400.0" prefWidth="623.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -175,7 +175,8 @@
                                     <TableColumn fx:id="editAttributeValue1" prefWidth="156.6666717529297" text="attribute value" />
                                  </columns>
                               </TableView>
-                              <Button layoutX="478.0" layoutY="310.0" mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration" />
+                              <Button layoutX="478.0" layoutY="295.0" mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration" />
+                              <Button layoutX="480.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="124.0" text="Go Welcome Page" />
                            </children>
                         </AnchorPane>
                      </children>

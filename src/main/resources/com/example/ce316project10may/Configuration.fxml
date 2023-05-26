@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <HBox centerShape="false" prefHeight="181.0" prefWidth="600.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -108,19 +108,5 @@
          </children>
       </HBox>
       <Button mnemonicParsing="false" onAction="#importConfigurations" text="Import Configuration" />
-      <HBox centerShape="false" layoutX="10.0" layoutY="10.0" prefHeight="181.0" prefWidth="600.0">
-         <children>
-            <Label prefHeight="25.0" prefWidth="107.0" text="Choose Language: ">
-               <HBox.margin>
-                  <Insets left="190.0" top="50.0" />
-               </HBox.margin>
-            </Label>
-            <ChoiceBox fx:id="languageBox1" centerShape="false" prefHeight="25.0" prefWidth="139.0">
-               <HBox.margin>
-                  <Insets top="50.0" />
-               </HBox.margin>
-            </ChoiceBox>
-         </children>
-      </HBox>
    </children>
 </AnchorPane>

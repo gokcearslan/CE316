@@ -14,7 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.awt.event.MouseEvent;
 import java.sql.Statement;
 import java.io.*;
@@ -26,8 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.nio.file.*;
 import java.util.stream.*;
 import java.sql.*;
@@ -141,8 +138,7 @@ public class Controller implements Initializable {
     ArrayList<Configuration> configurations = new ArrayList<>();
 
 
-    private boolean hasError = false;
-
+private boolean hasError;
     public void compileAndExecuteWithParameter(List<File> files) throws InterruptedException, IOException {
 
         List<String> erroredFiles = new ArrayList<>();
@@ -154,6 +150,9 @@ public class Controller implements Initializable {
         }
 
         for (File file : files) {
+
+            hasError = false;
+
             String studentOutputForError = "";
 
             try {
@@ -317,7 +316,8 @@ public class Controller implements Initializable {
                 studentResult = "NULL";
             } else if (studentOutputForError.equals(expectedOutput)) {
                 studentResult = "Success";
-            } else if (hasError) {
+            }
+            else if (hasError) {
                 studentResult = studentOutputForError;  // If an error occurred, set studentResult to the error message
             } else {
                 studentResult = "Failure";
@@ -360,6 +360,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         }
+
         executedResults();
 
     }
@@ -573,6 +574,7 @@ public class Controller implements Initializable {
         expectedOutputTxt.clear();
 
         root = FXMLLoader.load(getClass().getResource("OpenProject.fxml"));
+
         stage = (Stage) ((Node) d.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -580,6 +582,7 @@ public class Controller implements Initializable {
 
 
     }
+
 
     private String printProcessOutput(Process process) throws IOException {
         String finalOutput;
@@ -817,13 +820,14 @@ public class Controller implements Initializable {
     }
 
     public void importConfigurations() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
+        FileChooser fileChooser = new FileChooser();
 
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+
+        if (selectedFile != null) {
             try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
                 String configurationLanguage = null;
                 String configurationName = null;
@@ -832,7 +836,7 @@ public class Controller implements Initializable {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.trim().isEmpty()) {
-                        continue; // Skip empty line
+                        continue;
                     }
                     String[] parts = line.split(":");
                     if (parts.length == 2) {
@@ -847,29 +851,28 @@ public class Controller implements Initializable {
                             givenInput = value;
                         }
                     } else {
-                        // Handle the case when the line does not have key-value pairs
                         System.out.println("Invalid line: " + line);
                     }
                 }
 
-                // Insert the configuration into the database if all values are present
                 if (configurationLanguage != null && configurationName != null && givenInput != null) {
                     insertConfiguration(configurationLanguage, configurationName, givenInput);
                     System.out.println("Configurations imported successfully!");
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Export Successful");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Configurations imported successfully!");
+                    alert.showAndWait();
                 } else {
                     System.out.println("Incomplete configuration data.");
                 }
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Export Successful");
-                alert.setHeaderText(null);
-                alert.setContentText("Configurations imported successfully!");
-                alert.showAndWait();
+
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
                 System.out.println("Error importing configurations: " + e.getMessage());
             }
         } else {
-            // No file selected, handle the cancel operation or show an error message
             System.out.println("No file selected.");
         }
     }
@@ -889,6 +892,7 @@ public class Controller implements Initializable {
 
         }
     }
+
         @Override
         public void initialize (URL location, ResourceBundle resources){
 
@@ -1031,74 +1035,57 @@ public class Controller implements Initializable {
         }
 
 
-        public void openFileChooserAndReadFile () {
-            List<Integer> numbers = new ArrayList<>();
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    return file.getName().toLowerCase().endsWith(".txt");
-                }
+    public void openFileChooserAndReadFile() {
+        List<Integer> numbers = new ArrayList<>();
+        FileChooser fileChooser = new FileChooser();
 
-                @Override
-                public String getDescription() {
-                    return "Text Files (*.txt)";
-                }
-            });
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
 
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                try {
-                    String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
-                    numbers = Arrays.stream(content.split("\\s+"))
-                            .filter(s -> !s.isEmpty())
-                            .map(Integer::parseInt)
-                            .collect(Collectors.toList());
 
-                    // Set the value of inputTxt using the content of the file
-                    inputTxt.setText(content);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+
+        if (selectedFile != null) {
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
+                numbers = Arrays.stream(content.split("\\s+"))
+                        .filter(s -> !s.isEmpty())
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+
+                inputTxt.setText(content);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("Error reading the file");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
             }
         }
+    }
 
-        public void openFileChooserAndReadFiles () {
-            List<Integer> numbers = new ArrayList<>();
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    return file.getName().toLowerCase().endsWith(".txt");
-                }
+    public void openFileChooserAndReadFiles() {
+        List<Integer> numbers = new ArrayList<>();
+        FileChooser fileChooser = new FileChooser();
 
-                @Override
-                public String getDescription() {
-                    return "Text Files (*.txt)";
-                }
-            });
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
 
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                try {
-                    String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
-                    numbers = Arrays.stream(content.split("\\s+"))
-                            .filter(s -> !s.isEmpty())
-                            .map(Integer::parseInt)
-                            .collect(Collectors.toList());
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
 
-                    // Set the value of inputTxt using the content of the file
-                    expectedOutputTxt.setText(content);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        if (selectedFile != null) {
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath())));
+                numbers = Arrays.stream(content.split("\\s+"))
+                        .filter(s -> !s.isEmpty())
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+
+                expectedOutputTxt.setText(content);
+            } catch (IOException e) {
             }
         }
-
+    }
 
         @FXML
         public void switchToConfig (ActionEvent e) throws IOException {

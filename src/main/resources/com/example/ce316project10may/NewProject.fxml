@@ -5,8 +5,6 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +13,6 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
-      <HBox layoutX="3.0" layoutY="376.0" prefHeight="121.0" prefWidth="629.0" />
       <HBox prefHeight="44.0" prefWidth="629.0" AnchorPane.bottomAnchor="404.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label prefHeight="25.0" prefWidth="75.0" text="Project Name:">
@@ -95,27 +92,17 @@
             </TextArea>
          </children>
       </HBox>
-      <HBox layoutX="189.0" layoutY="211.0" prefHeight="197.0" prefWidth="346.0" AnchorPane.leftAnchor="189.0" AnchorPane.rightAnchor="192.0" AnchorPane.topAnchor="211.0">
-         <children>
-            <TableView fx:id="ResultTW" prefHeight="186.0" prefWidth="350.0">
-              <columns>
-                <TableColumn fx:id="studentIDTC" prefWidth="193.99996948242188" text="Student ID" />
-                <TableColumn fx:id="StudentResulTC" prefWidth="150.66668701171875" text="Result" />
-              </columns>
-            </TableView>
-         </children>
-      </HBox>
-      <VBox layoutX="519.0" layoutY="416.0" prefHeight="99.0" prefWidth="208.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#executeAll" prefHeight="25.0" prefWidth="186.0" text="Choose student files and Run" />
-         </children>
-      </VBox>
-      <ButtonBar layoutX="38.0" layoutY="412.0" prefHeight="99.0" prefWidth="429.0">
+      <ButtonBar layoutX="285.0" layoutY="321.0" prefHeight="99.0" prefWidth="429.0">
         <buttons>
             <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Go to Welcome Page" />
             <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Go to Create Config" />
             <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="233.0" text="Go New Project " />
         </buttons>
       </ButtonBar>
+      <VBox layoutX="500.0" layoutY="237.0" prefHeight="99.0" prefWidth="208.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#executeAll" prefHeight="25.0" prefWidth="186.0" text="Choose student files and Run" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
