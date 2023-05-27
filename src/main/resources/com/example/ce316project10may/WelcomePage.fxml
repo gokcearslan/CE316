@@ -26,7 +26,7 @@
                   <Font name="Book Antiqua" size="16.0" />
                </font>
             </Label>
-            <Label text="In each page a help menu will guide you! You can click on the question mark to see instructions." textAlignment="CENTER" textFill="#a51ab1">
+            <Label text="In each page a help menu will guide you! Click on the help button on the right corner to see instructions." textAlignment="CENTER" textFill="#a51ab1">
                <font>
                   <Font name="Book Antiqua" size="12.0" />
                </font>
