@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: DBDFEA;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <VBox prefHeight="472.0" prefWidth="600.0">
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="36.0" prefWidth="600.0" spacing="250.0">
                <children>
-                  <Label alignment="CENTER" text="CREATE CONFIGURATION" textAlignment="CENTER">
+                  <Label alignment="CENTER" text="CREATE CONFIGURATION" textAlignment="CENTER" textFill="#d12495">
                      <font>
-                        <Font name="Book Antiqua" size="20.0" />
+                        <Font name="Book Antiqua Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#showGuideCreateConfig" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideCreateConfig" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="HELP" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -38,7 +38,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="languageBox" centerShape="false" prefHeight="25.0" prefWidth="139.0">
+                  <ChoiceBox fx:id="languageBox" centerShape="false" prefHeight="25.0" prefWidth="139.0" style="-fx-background-color: EEF1FF; -fx-border-color: FDFCE5; -fx-background-radius: 50; -fx-border-radius: 50;">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -58,7 +58,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="configName" prefHeight="25.0" prefWidth="143.0">
+                  <TextField fx:id="configName" prefHeight="25.0" prefWidth="143.0" style="-fx-border-color: FDFCE5;">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -75,7 +75,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="deneme1" alignment="CENTER" mnemonicParsing="false" onAction="#openFileChooserAndReadFile" prefHeight="26.0" prefWidth="150.0" text="Select Input File">
+                  <Button fx:id="deneme1" alignment="CENTER" mnemonicParsing="false" onAction="#openFileChooserAndReadFile" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Select Input File">
                      <HBox.margin>
                         <Insets left="8.0" top="8.0" />
                      </HBox.margin>
@@ -92,7 +92,7 @@
                         <Insets left="10.0" top="30.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="inputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="87.0" prefWidth="258.0">
+                  <TextArea fx:id="inputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="87.0" prefWidth="258.0" style="-fx-border-color: FDFCE5;">
                      <HBox.margin>
                         <Insets right="8.0" />
                      </HBox.margin>
@@ -104,8 +104,8 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#importConfigurations" prefHeight="26.0" prefWidth="150.0" text="Import Configuration" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#createConfiguration" prefHeight="26.0" prefWidth="150.0" text="Create Configuration" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#importConfigurations" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Import Configuration" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#createConfiguration" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-border-radius: 50; -fx-background-radius: 50;" text="Create Configuration" />
                </children>
                <padding>
                   <Insets right="8.0" />
@@ -115,17 +115,17 @@
                <children>
                   <VBox alignment="BOTTOM_LEFT" prefHeight="86.0" prefWidth="600.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="26.0" prefWidth="150.0" text="Edit Configuration Page">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Edit Configuration Page">
                            <VBox.margin>
                               <Insets left="8.0" top="20.0" />
                            </VBox.margin>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="150.0" text="Create New Project Page">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create New Project Page">
                            <VBox.margin>
                               <Insets left="8.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="150.0" text="Welcome Page">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page">
                            <VBox.margin>
                               <Insets bottom="10.0" left="8.0" top="10.0" />
                            </VBox.margin>

@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="500.0" prefWidth="714.0" style="-fx-background-color: DBDFEA;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <VBox prefHeight="500.0" prefWidth="714.0">
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="57.0" prefWidth="714.0" spacing="450.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="57.0" prefWidth="714.0" spacing="440.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="142.0" text="NEW PROJECT">
+                  <Label prefHeight="26.0" prefWidth="153.0" text="NEW PROJECT" textFill="#d12495">
                      <font>
-                        <Font name="Book Antiqua" size="20.0" />
+                        <Font name="Book Antiqua Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#showGuideCreateProject" text="HELP">
+                  <Button mnemonicParsing="false" onAction="#showGuideCreateProject" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="HELP">
                      <HBox.margin>
                         <Insets right="60.0" />
                      </HBox.margin></Button>
@@ -41,7 +41,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="projectname">
+                  <TextField fx:id="projectname" style="-fx-border-color: FDFCE5;">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -58,7 +58,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="configurationBox" prefHeight="26.0" prefWidth="153.0">
+                  <ChoiceBox fx:id="configurationBox" prefHeight="26.0" prefWidth="153.0" style="-fx-background-color: EEF1FF; -fx-border-radius: 50; -fx-background-radius: 50; -fx-border-color: FDFCE5;">
                      <padding>
                         <Insets left="30.0" />
                      </padding>
@@ -71,7 +71,7 @@
                         <Insets top="12.0" />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="149.0" text="Create Configuration">
+                  <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="149.0" style="-fx-background-color: EEF1FF; -fx-background-radius: 50; -fx-border-radius: 50; -fx-border-color: #277BC0;" text="Create Configuration">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -91,7 +91,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="filePathBox">
+                  <TextField fx:id="filePathBox" style="-fx-border-color: FDFCE5;">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -108,7 +108,7 @@
                         <Font name="Book Antiqua" size="12.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#openFileChooserAndReadFiles" prefHeight="26.0" prefWidth="156.0" text="Select Output File">
+                  <Button mnemonicParsing="false" onAction="#openFileChooserAndReadFiles" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: EEF1FF; -fx-border-radius: 50; -fx-background-radius: 50; -fx-border-color: #277BC0;" text="Select Output File">
                      <HBox.margin>
                         <Insets left="8.0" top="8.0" />
                      </HBox.margin>
@@ -125,7 +125,7 @@
                         <Insets left="100.0" top="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="expectedOutputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="371.0">
+                  <TextArea fx:id="expectedOutputTxt" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="371.0" style="-fx-border-color: FDFCE5;">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -134,7 +134,7 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="714.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#executeAll" prefHeight="26.0" prefWidth="156.0" text="Select Student Files/Run">
+                  <Button mnemonicParsing="false" onAction="#executeAll" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: EEF1FF; -fx-background-radius: 50; -fx-border-radius: 50; -fx-border-color: #277BC0;" text="Select Student Files/Run">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -148,8 +148,8 @@
                <children>
                   <VBox alignment="BOTTOM_LEFT" prefHeight="112.0" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="156.0" text="Welcome Page" />
-                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="156.0" text="Create Configuration Page" />
+                        <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="170.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page" />
+                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="27.0" prefWidth="170.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create Configuration Page" />
                      </children>
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

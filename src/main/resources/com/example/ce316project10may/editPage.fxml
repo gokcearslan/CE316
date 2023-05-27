@@ -14,32 +14,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: DBDFEA;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
     <children>
       <VBox prefHeight="400.0" prefWidth="610.0">
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="22.0" prefWidth="610.0" spacing="320.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="22.0" prefWidth="610.0" spacing="280.0">
                <children>
-                  <Label text="EDIT CONFIGURATION">
+                  <Label prefHeight="26.0" prefWidth="252.0" text="EDIT CONFIGURATION" textFill="#d12495">
                      <font>
-                        <Font name="Book Antiqua" size="20.0" />
+                        <Font name="Book Antiqua Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#showGuideEdit" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideEdit" style="-fx-background-color: EEF1FF; -fx-border-radius: 50; -fx-background-radius: 50; -fx-border-color: BAABDA;" text="HELP" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </padding>
             </HBox>
-              <TabPane fx:id="TabPane" prefHeight="508.0" prefWidth="610.0" tabClosingPolicy="UNAVAILABLE">
+              <TabPane fx:id="TabPane" prefHeight="508.0" prefWidth="610.0" style="-fx-background-color: DBDFEA;" tabClosingPolicy="UNAVAILABLE">
                   <tabs>
-                      <Tab fx:id="ListTab" text="List Configuration">
+                      <Tab fx:id="ListTab" style="-fx-background-color: DBDFEA;" text="List Configuration">
                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="427.0" prefWidth="623.0">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="427.0" prefWidth="623.0" style="-fx-background-color: DBDFEA;">
                            <children>
                               <HBox prefHeight="310.0" prefWidth="610.0">
                                  <children>
-                                              <TableView fx:id="editPageTW" prefHeight="351.0" prefWidth="333.0">
+                                              <TableView fx:id="editPageTW" prefHeight="351.0" prefWidth="333.0" style="-fx-background-color: DBDFEA;">
                                                   <columns>
                                                       <TableColumn fx:id="editConfigLang" prefWidth="99.99999845027924" text="C. Name" />
                                                       <TableColumn fx:id="editConfigName" prefWidth="89.60004425048828" text="C. Language" />
@@ -55,12 +55,12 @@
                                                                   <Insets left="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </Label>
-                                                          <TextField fx:id="configNameTxt" alignment="TOP_LEFT" prefHeight="26.0" prefWidth="238.0">
+                                                          <TextField fx:id="configNameTxt" alignment="TOP_LEFT" prefHeight="26.0" prefWidth="238.0" style="-fx-border-color: FDFCE5;">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" right="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </TextField>
-                                                          <Button mnemonicParsing="false" onAction="#goToEditConfig" text="Edit">
+                                                          <Button mnemonicParsing="false" onAction="#goToEditConfig" style="-fx-background-color: EEF1FF; -fx-background-radius: 50; -fx-border-color: #277BC0; -fx-border-radius: 50;" text="Edit">
                                                               <VBox.margin>
                                                                   <Insets left="232.0" right="8.0" top="10.0" />
                                                               </VBox.margin>
@@ -74,31 +74,31 @@
                                                       <Insets left="8.0" top="5.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <TextField fx:id="configNameTxt1" prefHeight="26.0" prefWidth="185.0">
+                                                <TextField fx:id="configNameTxt1" prefHeight="26.0" prefWidth="185.0" style="-fx-border-color: FDFCE5;">
                                                    <VBox.margin>
                                                       <Insets left="8.0" right="8.0" top="10.0" />
                                                    </VBox.margin>
                                                 </TextField>
-                                                <Button mnemonicParsing="false" onAction="#goToExportConfig" text="Export">
+                                                <Button mnemonicParsing="false" onAction="#goToExportConfig" prefHeight="27.0" prefWidth="69.0" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Export">
                                                    <VBox.margin>
-                                                      <Insets left="220.0" right="8.0" top="10.0" />
+                                                      <Insets left="200.0" right="8.0" top="10.0" />
                                                    </VBox.margin>
                                                 </Button>
                                              </children>
                                           </VBox>
                                                   <VBox prefHeight="119.0" prefWidth="243.0">
                                                       <children>
-                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="156.0" text="Create Configuration Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="27.0" prefWidth="165.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create Configuration Page">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" />
                                                               </VBox.margin>
                                                           </Button>
-                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="156.0" text="Create New Project Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="165.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create New Project Page">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </Button>
-                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="156.0" text="Welcome Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="165.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page">
                                                               <VBox.margin>
                                                                   <Insets bottom="5.0" left="8.0" top="10.0" />
                                                               </VBox.margin>
@@ -113,7 +113,7 @@
                               </AnchorPane>
                           </content>
                       </Tab>
-                      <Tab fx:id="EditTab" text="Edit Configuration">
+                      <Tab fx:id="EditTab" style="-fx-background-color: DBDFEA;" text="Edit Configuration">
                           <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                   <children>
@@ -129,14 +129,14 @@
                                        <children>
                                                   <VBox prefHeight="232.0" prefWidth="324.0">
                                                       <children>
-                                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="67.0">
+                                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="66.0">
                                                    <children>
                                                       <Label prefHeight="28.0" prefWidth="141.0" text="To Delete Configuration:">
                                                          <padding>
                                                             <Insets top="10.0" />
                                                          </padding>
                                                       </Label>
-                                                                <Button mnemonicParsing="false" onAction="#deleteMethod" text="Delete Configuration">
+                                                                <Button mnemonicParsing="false" onAction="#deleteMethod" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Delete Configuration">
                                                          <HBox.margin>
                                                             <Insets top="8.0" />
                                                          </HBox.margin>
@@ -151,7 +151,7 @@
                                                                   <Insets left="8.0" top="8.0" />
                                                               </VBox.margin>
                                                           </Label>
-                                                          <ChoiceBox fx:id="columnNameTextField" prefWidth="150.0">
+                                                          <ChoiceBox fx:id="columnNameTextField" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: FDFCE5; -fx-background-radius: 50; -fx-border-radius: 50;">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" top="5.0" />
                                                               </VBox.margin>
@@ -161,12 +161,12 @@
                                                                   <Insets left="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </Label>
-                                                          <TextField fx:id="columnNameTextField1" prefHeight="10.0" prefWidth="129.0">
+                                                          <TextField fx:id="columnNameTextField1" prefHeight="10.0" prefWidth="129.0" style="-fx-border-color: FDFCE5;">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" right="8.0" top="5.0" />
                                                               </VBox.margin>
                                                           </TextField>
-                                                          <Button mnemonicParsing="false" onAction="#editMethod" text="Edit">
+                                                          <Button mnemonicParsing="false" onAction="#editMethod" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Edit">
                                                               <VBox.margin>
                                                                   <Insets left="300.0" top="10.0" />
                                                               </VBox.margin>
@@ -175,17 +175,17 @@
                                                   </VBox>
                                                   <VBox prefHeight="151.0" prefWidth="311.0">
                                                       <children>
-                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Create Configuration Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create Configuration Page">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </Button>
-                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Create New Project Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Create New Project Page">
                                                               <VBox.margin>
                                                                   <Insets left="8.0" top="10.0" />
                                                               </VBox.margin>
                                                           </Button>
-                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Welcome Page">
+                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page">
                                                               <VBox.margin>
                                                                   <Insets bottom="5.0" left="8.0" top="10.0" />
                                                               </VBox.margin>
@@ -203,7 +203,7 @@
                               </AnchorPane>
                           </content>
                       </Tab>
-                  <Tab fx:id="exportTab" text="Export Configuration">
+                  <Tab fx:id="exportTab" style="-fx-background-color: DBDFEA;" text="Export Configuration">
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
@@ -219,12 +219,12 @@
                                           </TableView>
                                           <VBox prefHeight="200.0" prefWidth="341.0" spacing="150.0">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration">
+                                                <Button mnemonicParsing="false" onAction="#exportConfig" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Export Configuration">
                                                    <VBox.margin>
                                                       <Insets left="100.0" top="100.0" />
                                                    </VBox.margin>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="124.0" text="Welcome Page" />
+                                                <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: EEF1FF; -fx-border-color: #277BC0; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page" />
                                              </children>
                                              <HBox.margin>
                                                 <Insets left="8.0" />

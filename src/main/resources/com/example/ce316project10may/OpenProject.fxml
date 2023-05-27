@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="481.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
+<AnchorPane prefHeight="481.0" prefWidth="678.0" style="-fx-background-color: DBDFEA;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
       <VBox prefHeight="481.0" prefWidth="678.0">
          <children>
             <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="678.0" spacing="450.0">
                <children>
-                  <Label text="OPEN PROJECT">
+                  <Label text="OPEN PROJECT" textFill="#d12495">
                      <font>
-                        <Font name="Book Antiqua" size="20.0" />
+                        <Font name="Book Antiqua Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#showGuideOpenProject" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideOpenProject" style="-fx-background-color: EEF1FF; -fx-border-color: BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="HELP" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -38,14 +38,14 @@
                         <Insets left="100.0" top="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ChoiceBox fx:id="projectNameCB" prefWidth="150.0">
+                  <ChoiceBox fx:id="projectNameCB" prefWidth="150.0" style="-fx-background-color: EEF1FF; -fx-border-color: FDFCE5; -fx-background-radius: 50; -fx-border-radius: 50;">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </ChoiceBox>
                </children>
             </HBox>
-            <TableView fx:id="OpenProjectTable" prefHeight="314.0" prefWidth="678.0">
+            <TableView fx:id="OpenProjectTable" prefHeight="314.0" prefWidth="678.0" style="-fx-background-color: EEF1FF;">
               <columns>
                 <TableColumn fx:id="ProjectNameColumn" prefWidth="110.0" text="Project Name" />
                 <TableColumn fx:id="StudentIdColumn" prefWidth="90.4000244140625" text="Student ID" />
@@ -57,7 +57,7 @@
             </TableView>
             <HBox prefHeight="58.0" prefWidth="678.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#switchToWelcome" text="Welcome Page ">
+                  <Button mnemonicParsing="false" onAction="#switchToWelcome" style="-fx-background-color: EEF1FF; -fx-border-color: #BAABDA; -fx-background-radius: 50; -fx-border-radius: 50;" text="Welcome Page ">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>

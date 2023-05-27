@@ -999,6 +999,8 @@ private boolean hasError;
             }
         }
 
+
+
         public void createConfiguration () {
             if (configName.getText().isEmpty() || languageBox.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
