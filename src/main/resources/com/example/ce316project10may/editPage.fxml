@@ -25,7 +25,7 @@
                         <Font name="Book Antiqua" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideEdit" text="HELP" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -39,7 +39,7 @@
                            <children>
                               <HBox prefHeight="310.0" prefWidth="610.0">
                                  <children>
-                                              <TableView fx:id="editPageTW" prefHeight="327.0" prefWidth="333.0">
+                                              <TableView fx:id="editPageTW" prefHeight="351.0" prefWidth="333.0">
                                                   <columns>
                                                       <TableColumn fx:id="editConfigLang" prefWidth="99.99999845027924" text="C. Name" />
                                                       <TableColumn fx:id="editConfigName" prefWidth="89.60004425048828" text="C. Language" />

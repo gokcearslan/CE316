@@ -573,7 +573,7 @@ private boolean hasError;
         projectname.clear();
         expectedOutputTxt.clear();
 
-        root = FXMLLoader.load(getClass().getResource("OpenProject.fxml"));
+        root = FXMLLoader.load(getClass().getResource("ListStudentResults.fxml"));
 
         stage = (Stage) ((Node) d.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -1465,5 +1465,33 @@ private boolean hasError;
         guideAlert.setContentText("1. Give project a name. \n2. Select the name of the configuration you want to include to the project or you can create a new configuration to use.\n3. To provide the expected output you can either select a txt file or enter them manually. The output should be separated by space in a single line for both cases.\n Select one of the option and skip the given space for other option.\n4.Click on 'Select Student Files/Run' button.\n5. Select the folder that contains the zip files of the students. All files should be in zip format!");
         guideAlert.showAndWait();
     }
-
+    public void showGuideListResults() {
+        Alert guideAlert = new Alert(Alert.AlertType.INFORMATION);
+        guideAlert.getDialogPane().setPrefWidth(600);
+        guideAlert.getDialogPane().setPrefHeight(200);
+        guideAlert.setTitle("Guide");
+        guideAlert.setHeaderText("How to See The Student Results");
+        guideAlert.setContentText("1. Select the name of the project that you want to display the student results \n2. Click on 'See Results'. The results of the students withe the student IDs will be displayed in the table.");
+        guideAlert.showAndWait();
     }
+    public void showGuideOpenProject() {
+        Alert guideAlert = new Alert(Alert.AlertType.INFORMATION);
+        guideAlert.getDialogPane().setPrefWidth(600);
+        guideAlert.getDialogPane().setPrefHeight(200);
+        guideAlert.setTitle("Guide");
+        guideAlert.setHeaderText("How to Open An Existing Project");
+        guideAlert.setContentText("1. Select the name of the project that you want to open from the choice box.All the information about the project will be displayed in the table below.");
+        guideAlert.showAndWait();
+    }
+    public void showGuideEdit() {
+        Alert guideAlert = new Alert(Alert.AlertType.INFORMATION);
+        guideAlert.getDialogPane().setPrefWidth(600);
+        guideAlert.getDialogPane().setPrefHeight(400);
+        guideAlert.setTitle("Guide");
+        guideAlert.setHeaderText("How to Edit/Export Configuration");
+        guideAlert.setContentText("The table on the left contains the information about the existing configurations.\nYou can either enter the name of the configuration to edit or export. Please select one and leave the name text field of the other option empty. \nCheck from the table and enter the name of the configuration you want to edit/export. \nClick on 'Edit Configuration' to edit or 'Export Configuration' to export. You will be directed to the next step!\n**TO EDIT** \n1. To delete the chosen configuration click on 'Delete Configuration' button \n2. To edit the configuration select the column you want to change value of. \n3. Enter a new value for the column and click on 'Edit'.\n**TO EXPORT**\n1. Click on 'Export Configuration' button to export the chosen configuration. The configuration will be saved on your computer!" );
+        guideAlert.showAndWait();
+    }
+
+
+}

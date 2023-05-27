@@ -11,14 +11,14 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("WelcomePage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 400, 250);
         stage.setTitle("Integrated Assignment Environment!");
 
         stage.setScene(scene);
         stage.show();
 
-        stage.setMinWidth(600);
-        stage.setMinHeight(500);
+        stage.setMinWidth(700);
+        stage.setMinHeight(550);
         stage.setMaxWidth(750);
         stage.setMaxHeight(600);
         stage.setResizable(true);

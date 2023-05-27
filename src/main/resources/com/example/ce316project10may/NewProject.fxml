@@ -15,14 +15,17 @@
    <children>
       <VBox prefHeight="500.0" prefWidth="714.0">
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="57.0" prefWidth="714.0" spacing="500.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="57.0" prefWidth="714.0" spacing="450.0">
                <children>
                   <Label prefHeight="26.0" prefWidth="142.0" text="NEW PROJECT">
                      <font>
                         <Font name="Book Antiqua" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#showGuideCreateProject" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideCreateProject" text="HELP">
+                     <HBox.margin>
+                        <Insets right="60.0" />
+                     </HBox.margin></Button>
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -147,7 +150,6 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="156.0" text="Welcome Page" />
                         <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="156.0" text="Create Configuration Page" />
-                        <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="156.0" text="New Project Page " />
                      </children>
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
