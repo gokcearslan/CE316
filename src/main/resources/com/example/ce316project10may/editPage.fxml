@@ -10,180 +10,237 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
     <children>
-        <TabPane fx:id="TabPane" prefHeight="400.0" prefWidth="623.0" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab fx:id="ListTab" text="List Configuration">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="427.0" prefWidth="623.0">
-                            <children>
-                                <VBox prefHeight="368.0" prefWidth="381.0">
-                                    <children>
-                                        <TableView fx:id="editPageTW" prefHeight="368.0" prefWidth="359.0">
-                                            <columns>
-                                                <TableColumn fx:id="editConfigLang" prefWidth="152.66668701171875" text="Configuration Name" />
-                                                <TableColumn fx:id="editConfigName" prefWidth="146.66668701171875" text="Configuration Language" />
-                                                <TableColumn fx:id="editGivenInput" prefWidth="78.0" text="Given input" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="381.0" prefHeight="118.0" prefWidth="241.0">
-                                    <children>
-                                        <Label prefHeight="67.0" prefWidth="197.0" text="enter the configuration name to edit">
-                                            <VBox.margin>
-                                                <Insets left="40.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Label>
-                                        <TextField fx:id="configNameTxt" prefHeight="26.0" prefWidth="185.0">
-                                            <VBox.margin>
-                                                <Insets top="10.0" />
-                                            </VBox.margin>
-                                        </TextField>
-                                        <Button mnemonicParsing="false" onAction="#goToEditConfig" text="Edit">
-                                            <VBox.margin>
-                                                <Insets bottom="20.0" left="190.0" top="20.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="381.0" layoutY="249.0" prefHeight="119.0" prefWidth="243.0">
-                                    <children>
-                                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="0.0" prefWidth="157.0" text="Create New Configuration">
-                                            <VBox.margin>
-                                                <Insets left="70.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Go Project Creation Page">
-                                            <VBox.margin>
-                                                <Insets left="70.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Go to Welcome Page">
-                                            <VBox.margin>
-                                                <Insets bottom="5.0" left="70.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                    </children>
-                                </VBox>
-                        <VBox layoutX="382.0" layoutY="118.0" prefHeight="118.0" prefWidth="241.0">
+      <VBox prefHeight="400.0" prefWidth="610.0">
+         <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="22.0" prefWidth="610.0" spacing="320.0">
+               <children>
+                  <Label text="EDIT CONFIGURATION">
+                     <font>
+                        <Font name="Book Antiqua" size="20.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" text="HELP" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </HBox>
+              <TabPane fx:id="TabPane" prefHeight="508.0" prefWidth="610.0" tabClosingPolicy="UNAVAILABLE">
+                  <tabs>
+                      <Tab fx:id="ListTab" text="List Configuration">
+                          <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="427.0" prefWidth="623.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="241.0" text="enter the configuration name to export">
-                                 <VBox.margin>
-                                    <Insets left="20.0" top="5.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="configNameTxt1" prefHeight="26.0" prefWidth="185.0">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Button mnemonicParsing="false" onAction="#goToExportConfig" text="Export">
-                                 <VBox.margin>
-                                    <Insets bottom="20.0" left="190.0" top="20.0" />
-                                 </VBox.margin>
-                              </Button>
+                              <HBox prefHeight="310.0" prefWidth="610.0">
+                                 <children>
+                                              <TableView fx:id="editPageTW" prefHeight="327.0" prefWidth="333.0">
+                                                  <columns>
+                                                      <TableColumn fx:id="editConfigLang" prefWidth="99.99999845027924" text="C. Name" />
+                                                      <TableColumn fx:id="editConfigName" prefWidth="89.60004425048828" text="C. Language" />
+                                                      <TableColumn fx:id="editGivenInput" prefWidth="193.5999755859375" text="Given Input" />
+                                                  </columns>
+                                              </TableView>
+                                    <VBox prefHeight="356.0" prefWidth="279.0">
+                                       <children>
+                                                  <VBox prefHeight="118.0" prefWidth="241.0">
+                                                      <children>
+                                                          <Label prefHeight="18.0" prefWidth="146.0" text="Enter Configuration Name:">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Label>
+                                                          <TextField fx:id="configNameTxt" alignment="TOP_LEFT" prefHeight="26.0" prefWidth="238.0">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" right="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </TextField>
+                                                          <Button mnemonicParsing="false" onAction="#goToEditConfig" text="Edit">
+                                                              <VBox.margin>
+                                                                  <Insets left="232.0" right="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                      </children>
+                                                  </VBox>
+                                          <VBox prefHeight="118.0" prefWidth="241.0">
+                                             <children>
+                                                <Label prefHeight="17.0" prefWidth="241.0" text="Enter Configuration Name:">
+                                                   <VBox.margin>
+                                                      <Insets left="8.0" top="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <TextField fx:id="configNameTxt1" prefHeight="26.0" prefWidth="185.0">
+                                                   <VBox.margin>
+                                                      <Insets left="8.0" right="8.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <Button mnemonicParsing="false" onAction="#goToExportConfig" text="Export">
+                                                   <VBox.margin>
+                                                      <Insets left="220.0" right="8.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </Button>
+                                             </children>
+                                          </VBox>
+                                                  <VBox prefHeight="119.0" prefWidth="243.0">
+                                                      <children>
+                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="26.0" prefWidth="156.0" text="Create Configuration Page">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="156.0" text="Create New Project Page">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="156.0" text="Welcome Page">
+                                                              <VBox.margin>
+                                                                  <Insets bottom="5.0" left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                      </children>
+                                                  </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                            </children>
-                        </VBox>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="EditTab" text="Edit Configuration">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <VBox layoutX="313.0" layoutY="-2.0" prefHeight="210.0" prefWidth="311.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="312.00000000000006" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <Label text="select attribute name">
-                                            <VBox.margin>
-                                                <Insets left="90.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Label>
-                                        <ChoiceBox fx:id="columnNameTextField" prefWidth="150.0">
-                                            <VBox.margin>
-                                                <Insets left="75.0" top="5.0" />
-                                            </VBox.margin>
-                                        </ChoiceBox>
-                                        <Label prefHeight="31.0" prefWidth="153.0" text="new attribute value">
-                                            <VBox.margin>
-                                                <Insets top="10.0" />
-                                            </VBox.margin>
-                                        </Label>
-                                        <TextField fx:id="columnNameTextField1" prefHeight="10.0" prefWidth="129.0">
-                                            <VBox.margin>
-                                                <Insets top="5.0" />
-                                            </VBox.margin>
-                                        </TextField>
-                                        <Button mnemonicParsing="false" onAction="#editMethod" text="edit">
-                                            <VBox.margin>
-                                                <Insets left="250.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#deleteMethod" prefHeight="25.0" prefWidth="229.0" text="Click to Delete This Configuration">
-                                            <VBox.margin>
-                                                <Insets left="40.0" top="25.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="371.0" prefWidth="312.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="311.33333333333337" AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <TableView fx:id="editTab2TW" prefHeight="371.0" prefWidth="312.0">
-                                            <columns>
-                                                <TableColumn fx:id="editAttributeName" prefWidth="152.00002539157867" text="attribute name" />
-                                                <TableColumn fx:id="editAttributeValue" prefWidth="156.6666717529297" text="attribute value" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
-                                </VBox>
-                                <VBox layoutX="312.0" layoutY="220.0" prefHeight="151.0" prefWidth="311.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="312.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
-                                    <children>
-                                        <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Create New Configuration">
-                                            <VBox.margin>
-                                                <Insets left="70.0" top="50.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Go Project Creation Page">
-                                            <VBox.margin>
-                                                <Insets left="70.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Go to Welcome Page">
-                                            <VBox.margin>
-                                                <Insets bottom="5.0" left="70.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            <Tab fx:id="exportTab" text="Export Configuration">
-               <content>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="355.0" prefWidth="610.0">
+                              </AnchorPane>
+                          </content>
+                      </Tab>
+                      <Tab fx:id="EditTab" text="Edit Configuration">
+                          <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                  <children>
+                              <HBox prefHeight="330.0" prefWidth="610.0">
+                                 <children>
+                                              <TableView fx:id="editTab2TW" prefHeight="354.0" prefWidth="257.0">
+                                                  <columns>
+                                                      <TableColumn fx:id="editAttributeName" prefWidth="119.99993741512299" text="Column" />
+                                                      <TableColumn fx:id="editAttributeValue" prefWidth="190.40003204345703" text="Value" />
+                                                  </columns>
+                                              </TableView>
+                                    <VBox prefHeight="200.0" prefWidth="350.0">
+                                       <children>
+                                                  <VBox prefHeight="232.0" prefWidth="324.0">
+                                                      <children>
+                                                <HBox prefHeight="100.0" prefWidth="200.0" spacing="67.0">
+                                                   <children>
+                                                      <Label prefHeight="28.0" prefWidth="141.0" text="To Delete Configuration:">
+                                                         <padding>
+                                                            <Insets top="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                                <Button mnemonicParsing="false" onAction="#deleteMethod" text="Delete Configuration">
+                                                         <HBox.margin>
+                                                            <Insets top="8.0" />
+                                                         </HBox.margin>
+                                                                </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </padding>
+                                                </HBox>
+                                                          <Label text="Select Column:">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="8.0" />
+                                                              </VBox.margin>
+                                                          </Label>
+                                                          <ChoiceBox fx:id="columnNameTextField" prefWidth="150.0">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="5.0" />
+                                                              </VBox.margin>
+                                                          </ChoiceBox>
+                                                          <Label prefHeight="31.0" prefWidth="153.0" text="Enter New Value:">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Label>
+                                                          <TextField fx:id="columnNameTextField1" prefHeight="10.0" prefWidth="129.0">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" right="8.0" top="5.0" />
+                                                              </VBox.margin>
+                                                          </TextField>
+                                                          <Button mnemonicParsing="false" onAction="#editMethod" text="Edit">
+                                                              <VBox.margin>
+                                                                  <Insets left="300.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox prefHeight="151.0" prefWidth="311.0">
+                                                      <children>
+                                                          <Button mnemonicParsing="false" onAction="#switchToConfig" prefHeight="25.0" prefWidth="157.0" text="Create Configuration Page">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                          <Button mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="25.0" prefWidth="158.0" text="Create New Project Page">
+                                                              <VBox.margin>
+                                                                  <Insets left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                          <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="25.0" prefWidth="159.0" text="Welcome Page">
+                                                              <VBox.margin>
+                                                                  <Insets bottom="5.0" left="8.0" top="10.0" />
+                                                              </VBox.margin>
+                                                          </Button>
+                                                      </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                                  </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                                  </children>
+                              </AnchorPane>
+                          </content>
+                      </Tab>
+                  <Tab fx:id="exportTab" text="Export Configuration">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="editTab2TW1" layoutX="149.0" prefHeight="371.0" prefWidth="312.0">
-                                 <columns>
-                                    <TableColumn fx:id="editAttributeName1" prefWidth="152.00002539157867" text="attribute name" />
-                                    <TableColumn fx:id="editAttributeValue1" prefWidth="156.6666717529297" text="attribute value" />
-                                 </columns>
-                              </TableView>
-                              <Button layoutX="478.0" layoutY="295.0" mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration" />
-                              <Button layoutX="480.0" layoutY="331.0" mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="124.0" text="Go Welcome Page" />
+                              <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="355.0" prefWidth="610.0">
+                                 <children>
+                                    <HBox prefHeight="322.0" prefWidth="610.0">
+                                       <children>
+                                          <TableView fx:id="editTab2TW1" prefHeight="371.0" prefWidth="312.0">
+                                             <columns>
+                                                <TableColumn fx:id="editAttributeName1" prefWidth="152.00002539157867" text="Column" />
+                                                <TableColumn fx:id="editAttributeValue1" prefWidth="156.6666717529297" text="Value" />
+                                             </columns>
+                                          </TableView>
+                                          <VBox prefHeight="200.0" prefWidth="341.0" spacing="150.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#exportConfig" text="Export Configuration">
+                                                   <VBox.margin>
+                                                      <Insets left="100.0" top="100.0" />
+                                                   </VBox.margin>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#switchToWelcome" prefHeight="26.0" prefWidth="124.0" text="Welcome Page" />
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets left="8.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            </tabs>
-        </TabPane>
+                     </content>
+                  </Tab>
+                  </tabs>
+              </TabPane>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

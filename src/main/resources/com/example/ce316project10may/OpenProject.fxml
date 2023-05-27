@@ -1,26 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="481.0" prefWidth="678.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ce316project10may.Controller">
    <children>
-      <ChoiceBox fx:id="projectNameCB" layoutX="24.0" layoutY="34.0" prefWidth="150.0" />
-      <TableView fx:id="OpenProjectTable" layoutX="12.0" layoutY="71.0" prefHeight="361.0" prefWidth="669.0">
-        <columns>
-          <TableColumn fx:id="ProjectNameColumn" prefWidth="110.0" text="Project Name" />
-          <TableColumn fx:id="StudentIdColumn" prefWidth="110.0" text="Student ID" />
-            <TableColumn fx:id="ConfigNameColumn" prefWidth="110.0" text="Config Name" />
-            <TableColumn fx:id="StudentOutputColumn" prefWidth="110.0" text="Student Output" />
-            <TableColumn fx:id="ExpectedOutputColumn" prefWidth="110.0" text="Expected Output" />
-            <TableColumn fx:id="studentResultCol" prefWidth="116.80001220703127" text="Student Result" />
-        </columns>
-      </TableView>
-      <Label layoutX="24.0" layoutY="14.0" text="Select project name to open:" />
-      <Button layoutX="592.0" layoutY="442.0" mnemonicParsing="false" onAction="#switchToWelcome" text="Go to Welcome " />
+      <VBox prefHeight="481.0" prefWidth="678.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="678.0" spacing="450.0">
+               <children>
+                  <Label text="OPEN PROJECT">
+                     <font>
+                        <Font name="Book Antiqua" size="20.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" text="HELP" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="55.0" prefWidth="678.0" spacing="50.0">
+               <children>
+                  <Label text="Select the name of the project you want to open:">
+                     <font>
+                        <Font name="Book Antiqua" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="100.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="projectNameCB" prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets top="8.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <TableView fx:id="OpenProjectTable" prefHeight="314.0" prefWidth="678.0">
+              <columns>
+                <TableColumn fx:id="ProjectNameColumn" prefWidth="110.0" text="Project Name" />
+                <TableColumn fx:id="StudentIdColumn" prefWidth="90.4000244140625" text="Student ID" />
+                  <TableColumn fx:id="ConfigNameColumn" prefWidth="130.3999786376953" text="Configuration Name" />
+                  <TableColumn fx:id="StudentOutputColumn" prefWidth="110.0" text="Student Output" />
+                  <TableColumn fx:id="ExpectedOutputColumn" prefWidth="121.60003662109375" text="Expected Output" />
+                  <TableColumn fx:id="studentResultCol" prefWidth="112.79996337890623" text="Student Result" />
+              </columns>
+            </TableView>
+            <HBox prefHeight="58.0" prefWidth="678.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#switchToWelcome" text="Welcome Page ">
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

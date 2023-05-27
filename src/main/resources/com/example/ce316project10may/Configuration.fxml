@@ -115,12 +115,12 @@
                <children>
                   <VBox alignment="BOTTOM_LEFT" prefHeight="86.0" prefWidth="600.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="26.0" prefWidth="150.0" text="Edit Page">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToEditConfig" prefHeight="26.0" prefWidth="150.0" text="Edit Configuration Page">
                            <VBox.margin>
                               <Insets left="8.0" top="20.0" />
                            </VBox.margin>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="150.0" text="Project Creation Page">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#switchToNewProject" prefHeight="26.0" prefWidth="150.0" text="Create New Project Page">
                            <VBox.margin>
                               <Insets left="8.0" top="10.0" />
                            </VBox.margin>
