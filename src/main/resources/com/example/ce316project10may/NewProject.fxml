@@ -22,7 +22,7 @@
                         <Font name="Book Antiqua" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" text="HELP" />
+                  <Button mnemonicParsing="false" onAction="#showGuideCreateProject" text="HELP" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

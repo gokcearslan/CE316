@@ -1447,4 +1447,23 @@ private boolean hasError;
             Files.copy(zipIn, file.toPath());
             return file;
         }
+    public void showGuideCreateConfig() {
+        Alert guideAlert = new Alert(Alert.AlertType.INFORMATION);
+        guideAlert.getDialogPane().setPrefWidth(600);
+        guideAlert.getDialogPane().setPrefHeight(300);
+        guideAlert.setTitle("Guide");
+        guideAlert.setHeaderText("How to Create Configuration");
+        guideAlert.setContentText("1. Choose a programming language from the choice box.\n2. Give configuration a name\n3. To add an input you can either select a txt file or enter them manually. The inputs should be separated by space in a single line for both cases.\n Select one of the option and skip the given space for other option.\n4.Click on create configuration button.\n*If you want to import an existing configuration skip all the steps above and click on 'Import Configuration'. Select the file that has configuration information.");
+        guideAlert.showAndWait();
+    }
+    public void showGuideCreateProject() {
+        Alert guideAlert = new Alert(Alert.AlertType.INFORMATION);
+        guideAlert.getDialogPane().setPrefWidth(600);
+        guideAlert.getDialogPane().setPrefHeight(300);
+        guideAlert.setTitle("Guide");
+        guideAlert.setHeaderText("How to Create New Project");
+        guideAlert.setContentText("1. Give project a name. \n2. Select the name of the configuration you want to include to the project or you can create a new configuration to use.\n3. To provide the expected output you can either select a txt file or enter them manually. The output should be separated by space in a single line for both cases.\n Select one of the option and skip the given space for other option.\n4.Click on 'Select Student Files/Run' button.\n5. Select the folder that contains the zip files of the students. All files should be in zip format!");
+        guideAlert.showAndWait();
+    }
+
     }
