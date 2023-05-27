@@ -3,6 +3,7 @@ package com.example.ce316project10may;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -21,6 +22,12 @@ public class App extends Application {
         stage.setMaxWidth(750);
         stage.setMaxHeight(600);
         stage.setResizable(true);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Welcome to the Integrated Assignment Environment");
+        alert.setHeaderText(null);
+        alert.setContentText("Select an option to start. In each page a help menu will guide you! You can click on the question mark to see instructions.");
+
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {
